@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/flexus/static/css/main.a8b41053.css",
+    "main.js": "/flexus/static/js/main.3ffe171e.js",
+    "static/js/453.bb6081d9.chunk.js": "/flexus/static/js/453.bb6081d9.chunk.js",
+    "index.html": "/flexus/index.html",
+    "main.a8b41053.css.map": "/flexus/static/css/main.a8b41053.css.map",
+    "main.3ffe171e.js.map": "/flexus/static/js/main.3ffe171e.js.map",
+    "453.bb6081d9.chunk.js.map": "/flexus/static/js/453.bb6081d9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a8b41053.css",
+    "static/js/main.3ffe171e.js"
+  ]
+}
