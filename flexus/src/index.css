@@ -9,25 +9,30 @@
   font-style: normal;
 }
 
-.div-css {
+.div {
   @apply w-full bg-white antialiased;
 }
 
-.div-30-css {
-  @apply flex
-}
-
-.header-css {
-  @apply w-full p-4 border border-gray-200 bg-gray-50 rounded-t-xl dark:border-gray-600 dark:bg-gray-700 text-center;
+.header {
+  @apply w-full p-4 border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 text-center;
   font-family: 'main-font';
 }
 
-.title-css {
+.calendar-header {
+  @apply w-full p-4 border border-blue-50 bg-blue-50 dark:border-gray-600 dark:bg-gray-700 text-center;
+  font-family: 'main-font';
+}
+
+.month {
+  @apply text-2xl pr-1
+}
+
+.title {
   @apply text-2xl font-bold tracking-tight text-gray-900;
   font-family: 'main-font';
 }
 
-.card-css {
+.card {
   @apply block max-w-sm m-4 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700;
   font-family: 'main-font';
 }
