@@ -18,15 +18,6 @@
   font-family: 'main-font';
 }
 
-.calendar-header {
-  @apply w-full p-4 border border-blue-50 bg-blue-50 dark:border-gray-600 dark:bg-gray-700 text-center;
-  font-family: 'main-font';
-}
-
-.month {
-  @apply text-2xl pr-1
-}
-
 .title {
   @apply text-2xl font-bold tracking-tight text-gray-900;
   font-family: 'main-font';
@@ -36,6 +27,52 @@
   @apply block max-w-sm m-4 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700;
   font-family: 'main-font';
 }
+
+/*Calendar*/
+.calendar {
+  @apply w-full;
+}
+
+.calendar-header {
+  @apply w-full p-4 border border-blue-50 bg-blue-50 dark:border-gray-600 dark:bg-gray-700 text-center;
+  font-family: 'main-font';
+}
+
+.month {
+  @apply text-2xl pr-1
+}
+
+.days {
+  @apply flex
+}
+
+.weeks {
+  @apply flex
+}
+
+.day {
+  @apply w-32 border-b-2 border-blue-50 text-gray-500;
+  font-family: 'main-font';
+}
+
+.day-gray {
+  @apply w-32 border-b-2 border-blue-50;
+  color: #d1d5db !important;
+  font-family: 'main-font';
+}
+
+/*.day-number {*/
+/*  @apply */
+/*}*/
+
+#Sun {
+  @apply text-red-500;
+}
+
+#Sat {
+  @apply text-blue-500;
+}
+
 
 body {
   margin: 0;
