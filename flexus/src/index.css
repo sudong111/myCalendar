@@ -47,27 +47,34 @@
 }
 
 .days {
-  @apply flex
+  @apply flex border-b-2 border-blue-50
 }
 
 .weeks {
-  @apply flex h-36
+  @apply flex h-36 border-b-2 border-blue-50
 }
 
 .day {
-  @apply w-32 border-b-2  border-blue-50 text-gray-500;
+  @apply flex w-36  border-r-2 border-blue-50 text-gray-500 justify-between;
   font-family: 'main-font';
 }
 
-.day-gray {
-  @apply w-32 border-b-2 border-blue-50;
+.text {
+  @apply text-xs text-gray-500 pr-1 pl-1;
+  font-family: 'main-font';
+}
+
+.text-gray {
+  @apply text-xs;
   color: #d1d5db !important;
   font-family: 'main-font';
 }
 
-/*.day-number {*/
-/*  @apply */
-/*}*/
+.text-red {
+  @apply text-xs;
+  color: #f05252 !important;
+  font-family: 'main-font';
+}
 
 #Sun {
   @apply text-red-500;
