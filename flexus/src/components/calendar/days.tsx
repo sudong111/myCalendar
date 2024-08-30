@@ -1,8 +1,10 @@
-import {startOfMonth, endOfMonth, startOfWeek, endOfWeek, format, addDays, subDays, addWeeks } from 'date-fns';
+import {startOfMonth, startOfWeek, addDays, addWeeks } from 'date-fns';
 
 interface CalendarProps {
     dateParams: {
         month: Date;
+        anniversary: Array<String>;
+        holidays: Array<String>;
     };
 }
 
@@ -13,6 +15,9 @@ export default function CalendarDays({ dateParams } : CalendarProps) {
     const rows = [];
     let days = [];
     let count = 0;
+
+    console.log(dateParams.holidays)
+    console.log(dateParams.anniversary)
 
     while (count <= 4 ) {
         days = [];

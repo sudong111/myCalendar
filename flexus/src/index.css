@@ -34,8 +34,12 @@
 }
 
 .calendar-header {
-  @apply w-full p-4 border border-blue-50 bg-blue-50 dark:border-gray-600 dark:bg-gray-700 text-center;
+  @apply flex justify-between w-full p-4 border border-blue-50 bg-blue-50 text-center;
   font-family: 'main-font';
+}
+
+.calendar-btn {
+  @apply flex text-2xl
 }
 
 .month {
@@ -47,11 +51,11 @@
 }
 
 .weeks {
-  @apply flex
+  @apply flex h-36
 }
 
 .day {
-  @apply w-32 border-b-2 border-blue-50 text-gray-500;
+  @apply w-32 border-b-2  border-blue-50 text-gray-500;
   font-family: 'main-font';
 }
 
