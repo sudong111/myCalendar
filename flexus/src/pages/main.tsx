@@ -1,13 +1,10 @@
-import Calendar from '../components/calendar';
+import Calendar from '../components/calendar/calendar';
 
 export default function Main() {
 
     return (
         <div className="div-css">
-            <div className="">
-                <Calendar/>
-            </div>
-
+            <Calendar/>
         </div>
     )
 }

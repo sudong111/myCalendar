@@ -13,6 +13,10 @@
   @apply w-full bg-white antialiased;
 }
 
+.div-css {
+  @apply h-screen w-full;
+}
+
 .header {
   @apply w-full p-4 border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 text-center;
   font-family: 'main-font';
@@ -30,7 +34,7 @@
 
 /*Calendar*/
 .calendar {
-  @apply w-full;
+  @apply flex flex-col w-full h-screen;
 }
 
 .calendar-header {
@@ -39,23 +43,27 @@
 }
 
 .calendar-btn {
-  @apply flex text-2xl
+  @apply flex text-2xl;
 }
 
 .month {
-  @apply text-2xl pr-1
+  @apply text-2xl pr-1;
 }
 
-.days {
-  @apply flex border-b-2 border-blue-50
+.dayOfWeek {
+  @apply flex border-b-2 border-blue-50;
 }
 
 .weeks {
-  @apply flex h-36 border-b-2 border-blue-50
+  @apply flex h-full border-b-2 border-blue-50;
+}
+
+.days {
+  @apply h-full flex flex-col;
 }
 
 .day {
-  @apply flex w-36  border-r-2 border-blue-50 text-gray-500 justify-between;
+  @apply flex flex-1 border-r-2 border-blue-50 text-gray-500 hover:bg-gray-50 justify-between;
   font-family: 'main-font';
 }
 

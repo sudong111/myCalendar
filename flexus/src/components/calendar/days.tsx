@@ -32,6 +32,10 @@ export default function CalendarDays({ dateParams } : CalendarProps) {
         return '';
     }
 
+    function handleClickDay() {
+        <div>test</div>
+    }
+
     while (count <= 4 ) {
         days = [];
         let firstDayOfWeek = addWeeks(startDate, count);
@@ -49,7 +53,7 @@ export default function CalendarDays({ dateParams } : CalendarProps) {
             }
             
             days.push(
-                <div className='day'>
+                <div className='day' onClick={handleClickDay}>
                     <span className={className} id={date[i]} key={date[i]}>{day.getDate()}</span>
                     {isHoliday && (
                         <span className={className}>{isHoliday}</span>
@@ -58,12 +62,13 @@ export default function CalendarDays({ dateParams } : CalendarProps) {
             )
         }
         rows.push(
-            <div key={count}>
-                <div className='weeks'>{days}</div>
-            </div>
+            <div className='weeks'>{days}</div>
         );
         count++;
     }
 
-    return <div>{rows}</div>
+    return (
+        <div className='days'>{rows}</div>
+    )
+
 }

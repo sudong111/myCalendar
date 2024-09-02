@@ -1,8 +1,8 @@
 import React, {useEffect, useState } from 'react';
-import CalendarHeader from './calendar/header';
-import CalendarWeek from './calendar/week';
-import CalendarDays from './calendar/days';
-import {holidayDto} from '../Dto/calendar.dto';
+import CalendarHeader from './header';
+import CalendarWeek from './week';
+import CalendarDays from './days';
+import {holidayDto} from '../../Dto/calendar.dto';
 import axios from 'axios';
 
 export default function Calendar() {
