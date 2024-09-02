@@ -4,7 +4,7 @@ export default function Main() {
 
     return (
         <div className="div-css">
-            <Calendar/>
+             <Calendar/>
         </div>
     )
 }
