@@ -11,6 +11,6 @@ export default function CalendarWeek() {
     }
     
     return (
-        <div className="days">{days}</div>
+        <div className="dayOfWeek">{days}</div>
     );
 }
