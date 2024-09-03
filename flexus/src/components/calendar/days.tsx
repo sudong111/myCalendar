@@ -33,7 +33,7 @@ export default function CalendarDays({ dateParams } : CalendarProps) {
     }
 
     function handleClickDay() {
-        <div>test</div>
+        
     }
 
     while (count <= 4 ) {
@@ -41,22 +41,24 @@ export default function CalendarDays({ dateParams } : CalendarProps) {
         let firstDayOfWeek = addWeeks(startDate, count);
         for (let i = 0; i < 7 ; i++ ) {
             let day = addDays(firstDayOfWeek, i);
-            let className = 'text';
+            let spanClassName = 'text';
+            let divClassName = 'day';
             let isHoliday = findHoliday(day);
 
             if(day.getMonth() != monthStart.getMonth()) {
-                className += ' text-gray';
+                spanClassName += ' text-gray';
+                divClassName = 'day-gray'
             }
             
             if(isHoliday) {
-                className += ' text-red';
+                spanClassName += ' text-red';
             }
             
             days.push(
-                <div className='day' onClick={handleClickDay}>
-                    <span className={className} id={date[i]} key={date[i]}>{day.getDate()}</span>
+                <div className={divClassName} onClick={divClassName != 'day-gray' ? handleClickDay : undefined}>
+                    <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
                     {isHoliday && (
-                        <span className={className}>{isHoliday}</span>
+                        <span className={spanClassName}>{isHoliday}</span>
                     )}
                 </div>
             )
