@@ -9,12 +9,8 @@
   font-style: normal;
 }
 
-.div {
-  @apply w-full bg-white antialiased;
-}
-
 .div-css {
-  @apply h-screen w-full;
+  @apply w-full;
 }
 
 .header {
@@ -33,17 +29,61 @@
 }
 
 /*side-memo*/
+
 .side-off {
-  @apply fixed w-36 bg-red-300 h-screen right-0 invisible;
+  @apply fixed right-0 invisible translate-x-full ease-in-out duration-300;
 }
 
 .side-on {
-  @apply fixed w-36 bg-red-300 h-screen right-0 visible;
+  @apply translate-x-0 flex flex-col ease-in-out duration-300;
+  width: 30rem;
+}
+
+
+.side-header {
+  @apply w-full h-12 p-3 flex justify-between items-center;
+  font-family: 'main-font';
+}
+
+.side-memo-title {
+  @apply flex w-full h-12 p-3;
+  font-family: 'main-font';
+}
+
+.input {
+  @apply border-gray-200 text-gray-900 text-sm rounded-lg border-2 focus:ring-blue-200 focus:border-blue-200 block w-full ml-2;
+  font-family: 'main-font';
+}
+
+.side-select-time {
+  @apply flex w-full h-12 p-3;
+  font-family: 'main-font';
+}
+
+.side-textarea {
+  @apply w-full h-full p-3;
+  font-family: 'main-font';
+}
+
+.textarea {
+  @apply block p-2.5 w-full h-full text-sm text-gray-900 rounded-lg border-2 border-gray-200 focus:ring-blue-200 focus:border-blue-200 resize-none;
+}
+
+.side-confirmed-button {
+  @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2;
+}
+
+.side-confirm {
+  @apply flex flex-row-reverse w-full h-16 p-3
+}
+
+.side-closed-button {
+  @apply flex text-2xl;
 }
 
 /*Calendar*/
 .calendar {
-  @apply flex flex-col w-full h-screen;
+  @apply flex flex-col w-full h-full;
 }
 
 .calendar-header {
@@ -51,7 +91,7 @@
   font-family: 'main-font';
 }
 
-.calendar-btn {
+.calendar-button {
   @apply flex text-2xl;
 }
 

@@ -36,7 +36,7 @@ export default function Header({ dateParams, changedMonth }: CalendarProps) {
                     {format(month, 'yyyy')}
                 </span>
             </div>
-            <div className="calendar-btn">
+            <div className="calendar-button">
                 <button onClick={handleClickPrevMonth}><BiChevronLeft /></button>
                 <button onClick={handleClickNextMonth}><BiChevronRight /></button>
             </div>

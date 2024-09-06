@@ -6,10 +6,11 @@ interface CalendarProps {
         month: Date;
         specialDay: holidayDto[];
     };
+    handleClickDay: () => void;
 }
 
 
-export default function CalendarDays({ dateParams } : CalendarProps) {
+export default function CalendarDays({ dateParams, handleClickDay } : CalendarProps) {
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let monthStart = startOfMonth(dateParams.month);
     let startDate = startOfWeek(monthStart);
@@ -30,10 +31,6 @@ export default function CalendarDays({ dateParams } : CalendarProps) {
             }
         }
         return '';
-    }
-
-    function handleClickDay() {
-        
     }
 
     while (count <= 4 ) {
