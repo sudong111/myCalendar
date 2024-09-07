@@ -3,39 +3,55 @@ import CalendarHeader from './header';
 import CalendarWeek from './week';
 import CalendarDays from './days';
 import SideMemo from './side-memo';
+import dateFormat from './date-format'
 import {holidayDto} from '../../Dto/calendar.dto';
+import {memoDto} from '../../Dto/memo.dto'
 import axios from 'axios';
 
 export default function Calendar() {
 
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [holiday, setHoliday] = useState<holidayDto[]>([]);
+    const [memo, setMemo] = useState<memoDto[]>([]);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [show, setShow] = useState(false);
+    const [savedTime, setSavedTime] = useState('');
 
-    const fetchData = async () => {
+    async function getMemo() {
         try {
+            const params = {
+                savedTime: currentMonth.getFullYear() + '-' + dateFormat(currentMonth.getMonth()+1)
+            };
+
+            const response = await axios.get('http://localhost:8080/api/memo', { params });
+            setMemo(response.data);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    async function getDate() {
+        try {
+            const params = {
+                ServiceKey: process.env.REACT_APP_DATA_GO_KR_API_KEY,
+                solYear: currentMonth.getFullYear(),
+                solMonth: ("0" + (currentMonth.getMonth() + 1)).slice(-2)
+            };
+
+            const response = await axios.get('https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo', { params });
+
+            const holidayData = response.data.response.body.items.item;
+
             let holidayList = [];
-            const [holidaysRes] = await Promise.all([
-                axios.get('https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo', {
-                    params: {
-                        ServiceKey: process.env.REACT_APP_DATA_GO_KR_API_KEY,
-                        solYear: currentMonth.getFullYear(),
-                        solMonth: ("0" + (currentMonth.getMonth() + 1)).slice(-2)
-                    }
-                })
-            ]);
-            const holidayData = holidaysRes.data.response.body.items.item;
-            
-            if(holidayData != undefined) {
-                if(!Array.isArray(holidayData)) {
+            if (holidayData) {
+                if (!Array.isArray(holidayData)) {
                     holidayList.push(holidayData);
-                }
-                else {
+                } else {
                     holidayList = holidayData;
                 }
             }
-            
+
             setHoliday(holidayList || []);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -46,15 +62,18 @@ export default function Calendar() {
 
     useEffect(() => {
         setDataLoaded(false);
-        fetchData();
+        getDate();
+        getMemo();
     }, [currentMonth]);
 
     function handleChangeMonth(newMonth: Date) {
         setCurrentMonth(newMonth);
     }
 
-    function handleClickDay() {
+    function handleClickDay(id: Date) {
+        let savedTime = id.getFullYear() + '-' + dateFormat(id.getMonth()+1) + '-' + dateFormat(id.getDate());
         setShow(true);
+        setSavedTime(savedTime);
     }
 
     function handleCloseButton() {
@@ -64,7 +83,7 @@ export default function Calendar() {
     return (
         <div className="calendar">
             <CalendarHeader
-                dateParams={
+                dataParams={
                     {month: currentMonth}}
                 changedMonth={handleChangeMonth}
             />
@@ -73,17 +92,22 @@ export default function Calendar() {
                     <CalendarWeek/>
                     {dataLoaded && (
                         <CalendarDays
-                            dateParams={
+                            dataParams={
                                 {
                                     month: currentMonth,
-                                    specialDay: holiday
+                                    specialDay: holiday,
+                                    memo: memo
                                 }}
                             handleClickDay={handleClickDay}
                         />
                     )}
                 </div>
                 <SideMemo
-                    show={show}
+                    dataParams={
+                        {
+                            show: show,
+                            savedTime: savedTime
+                        }}
                     handleCloseButton={handleCloseButton}/>
             </div>
         </div>

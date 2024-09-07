@@ -112,12 +112,17 @@
 }
 
 .day {
-  @apply flex flex-1 border-r-2 border-blue-50 text-gray-500 hover:bg-gray-50 justify-between;
+  @apply flex flex-col flex-1 border-r-2 border-blue-50 text-gray-500 hover:bg-gray-50 justify-between;
   font-family: 'main-font';
 }
 
 .day-gray {
   @apply flex flex-1 border-r-2 border-blue-50 text-gray-500 justify-between;
+  font-family: 'main-font';
+}
+
+.badge {
+  @apply flex justify-between bg-green-100 text-green-800 text-xs font-medium m-2 px-2.5 py-0.5 rounded;
   font-family: 'main-font';
 }
 

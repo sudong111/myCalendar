@@ -1,18 +1,19 @@
 import { format, addMonths, subMonths } from 'date-fns';
+import React from 'react';
 import { useState } from 'react';
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 
 interface CalendarProps {
-    dateParams: {
+    dataParams: {
         month: Date;
     };
     changedMonth: (newMonth: Date) => void;
 }
 
-export default function Header({ dateParams, changedMonth }: CalendarProps) {
+export default function Header({ dataParams, changedMonth }: CalendarProps) {
 
-    const [month, setMonth] = useState(dateParams.month);
+    const [month, setMonth] = useState(dataParams.month);
 
     function handleClickPrevMonth() {
         const newMonth = subMonths(month, 1);

@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function CalendarWeek() {
     const days = [];
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
