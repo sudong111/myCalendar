@@ -4,11 +4,11 @@ import pool from '../server/db'
 const router = Router();
 
 router.post('/memo', async (req, res) => {
-    const { title, savedTime, startTime, endTime, memo } = req.body;
+    const { title, savedtime, starttime, endtime, memo } = req.body;
     try {
         const result = await pool.query(
             'INSERT INTO memo (title, savedtime, starttime, endtime, memo) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [title, savedTime, startTime, endTime, memo]
+            [title, savedtime, starttime, endtime, memo]
         );
         res.status(200).json(result.rows[0]);
     } catch (err) {
@@ -19,7 +19,6 @@ router.post('/memo', async (req, res) => {
 
 router.get('/memo', async (req, res) => {
     const { savedTime } = req.query;
-    console.log(req);
     try {
         const result = await pool.query(
             `SELECT * FROM memo

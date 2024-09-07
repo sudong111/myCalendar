@@ -55,6 +55,10 @@
   font-family: 'main-font';
 }
 
+.timer {
+  @apply absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none;
+}
+
 .side-select-time {
   @apply flex w-full h-12 p-3;
   font-family: 'main-font';

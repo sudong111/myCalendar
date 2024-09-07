@@ -1,12 +1,13 @@
 import { Pool } from 'pg';
+require('dotenv').config();
 
 // 데이터베이스 연결 설정
 const pool = new Pool({
-    user: 'postgres',       // PostgreSQL 사용자명
-    host: 'localhost',           // 데이터베이스 호스트
-    database: 'postgres',   // 데이터베이스 이름
-    password: 'ehdrbs12',   // PostgreSQL 비밀번호
-    port: 5432,                  // PostgreSQL 포트
+    user: process.env.REACT_APP_DATA_DB_USER,
+    host: process.env.REACT_APP_DATA_DB_HOST,
+    database: process.env.REACT_APP_DATA_DB_NAME,
+    password: process.env.REACT_APP_DATA_DB_PW,
+    port: 5432,
 });
 
 // 데이터베이스 연결 확인

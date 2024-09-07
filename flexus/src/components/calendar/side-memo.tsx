@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import {memoDto} from '../../Dto/memo.dto';
-import { BiX, BiCheck } from "react-icons/bi";
+import { BiX, BiCheck, BiTime } from "react-icons/bi";
 
 interface SideMemoProps {
     dataParams: {
@@ -13,26 +13,28 @@ interface SideMemoProps {
 }
 
 export default function SideMemo({ dataParams, handleCloseButton } : SideMemoProps) {
+    console.log(dataParams.savedTime)
     const [memo, setMemo] = useState<memoDto>({
         id:0,
         title: '',
         savedtime: dataParams.savedTime,
-        starttime: '',
-        endtime: '',
+        starttime: '00:00',
+        endtime: '00:00',
         memo: ''
     });
 
     function handleChangedValues(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const { name, value } = e.target;
-        console.log(dataParams.savedTime);
         setMemo(prevMemo => ({
             ...prevMemo,
             [name]: value,
-            savedTime: dataParams.savedTime
+            savedtime: dataParams.savedTime
         }));
+        console.log(memo);
     }
 
     async function handleConfirmedButton() {
+        console.log(memo);
         try {
             const response = await fetch('http://localhost:8080/api/memo', {
                 method: 'POST',
@@ -67,12 +69,25 @@ export default function SideMemo({ dataParams, handleCloseButton } : SideMemoPro
             </div>
             <div className="side-select-time">
                 <p>time</p>
-                <input type="time" name="startTime" value={memo.starttime} onChange={handleChangedValues} className="input"/>
+                <div className="flex relative">
+                    <div className="timer">
+                        <BiTime/>
+                    </div>
+                    <input type="time" className="input" name="starttime" step="60" value={memo.starttime}
+                           onChange={handleChangedValues} min="00:00" max="23:59"/>
+                </div>
                 <p className="ml-2">~</p>
-                <input type="time" name="endTime" value={memo.endtime} onChange={handleChangedValues} className="input"/>
+                <div className="flex relative">
+                    <div className="timer">
+                        <BiTime/>
+                    </div>
+                    <input type="time" className="input" name="endtime" step="60" value={memo.endtime}
+                           onChange={handleChangedValues} min="00:00" max="23:59"/>
+                </div>
             </div>
             <div className="side-textarea">
-                <textarea className="textarea" name="memo" value={memo.memo} onChange={handleChangedValues} placeholder="메모를 작성하세요."></textarea>
+                <textarea className="textarea" name="memo" value={memo.memo} onChange={handleChangedValues}
+                          placeholder="메모를 작성하세요."></textarea>
             </div>
             <div className="side-confirm">
                 <button className="side-confirmed-button" onClick={handleConfirmedButton}><BiCheck/></button>

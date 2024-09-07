@@ -74,6 +74,7 @@ export default function Calendar() {
         let savedTime = id.getFullYear() + '-' + dateFormat(id.getMonth()+1) + '-' + dateFormat(id.getDate());
         setShow(true);
         setSavedTime(savedTime);
+        console.log(savedTime)
     }
 
     function handleCloseButton() {

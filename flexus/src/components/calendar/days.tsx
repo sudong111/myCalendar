@@ -66,21 +66,22 @@ export default function CalendarDays({ dataParams, handleClickDay } : CalendarPr
                 const data = new Date(item.savedtime).toISOString().split('T')[0];
                 return data === savedTime;
             });
-            if(filteredData.length != 0) {
-
-            }
 
             days.push(
                 <div className={divClassName} id={savedTime} key={savedTime} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
-                    <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
-                    {isHoliday && (
-                        <span className={spanClassName}>{isHoliday}</span>
-                    )}
-                    {filteredData.length > 0 && filteredData.map((data) => (
-                        <span className="badge" key={data.id}>{data.title}
-                            <p>{formatTime(data.starttime)} ~ {formatTime(data.endtime)}</p>
-                        </span>
-                    ))}
+                    <div>
+                        <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
+                        {isHoliday && (
+                            <span className={spanClassName}>{isHoliday}</span>
+                        )}
+                    </div>
+                    <div>
+                        {filteredData.length > 0 && filteredData.map((data) => (
+                            <span className="badge" key={data.id}>{data.title}
+                                <p>{formatTime(data.starttime)} ~ {formatTime(data.endtime)}</p>
+                            </span>
+                        ))}
+                    </div>
                 </div>
             )
         }
