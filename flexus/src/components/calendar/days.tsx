@@ -67,6 +67,10 @@ export default function CalendarDays({ dataParams, handleClickDay } : CalendarPr
                 return data === savedTime;
             });
 
+            function test() {
+
+            }
+
             days.push(
                 <div className={divClassName} id={savedTime} key={savedTime} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
                     <div>
