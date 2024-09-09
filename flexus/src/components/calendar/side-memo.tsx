@@ -17,10 +17,6 @@ interface SideMemoProps {
 export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMemo, handleModifyMemo, handleDeleteMemo } : SideMemoProps) {
     const [memo, setMemo] = useState<memoDto>(dataParams.memoDetail);
 
-    useEffect(() => {
-        setMemo(dataParams.memoDetail);
-    }, [dataParams.memoDetail]);
-
     function handleChangedValues(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const { name, value } = e.target;
         setMemo(prevMemo => ({
@@ -42,6 +38,10 @@ export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMe
         handleDeleteMemo(memo.id);
     }
 
+    useEffect(() => {
+        setMemo(dataParams.memoDetail);
+    }, [dataParams.memoDetail]);
+    
     return (
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">

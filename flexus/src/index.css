@@ -40,7 +40,7 @@
 }
 
 .badge {
-  @apply flex justify-between bg-green-200 text-green-800 text-xs font-medium m-2 px-1 py-0.5 rounded cursor-pointer hover:bg-green-100;
+  @apply flex justify-between bg-green-200 text-green-800 text-xs font-medium m-2 px-1 py-0.5 rounded cursor-pointer hover:bg-green-300;
 }
 
 .text {
@@ -132,7 +132,7 @@
 }
 
 .weeks {
-  @apply flex h-full border-b-2 border-blue-50;
+  @apply flex h-full border-b-2 border-blue-50 overflow-hidden;
 }
 
 .days {
@@ -141,6 +141,14 @@
 
 .day {
   @apply flex flex-col flex-1 border-r-2 border-blue-50 text-gray-500 hover:bg-gray-50 cursor-pointer justify-between;
+}
+
+.day-header {
+  @apply flex justify-between;
+}
+
+.memo-create-button {
+  @apply pl-1 text-2xl text-blue-500 hover:text-blue-600;
 }
 
 .day-gray {

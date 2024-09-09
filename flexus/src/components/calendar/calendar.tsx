@@ -1,4 +1,6 @@
 import React, {useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import CalendarHeader from './header';
 import CalendarWeek from './week';
 import CalendarDays from './days';
@@ -6,10 +8,9 @@ import SideMemo from './side-memo';
 import formatter from '../../utils/formatter.util'
 import {holidayDto} from '../../Dto/calendar.dto';
 import {memoDto} from '../../Dto/memo.dto'
-import axios from 'axios';
 
 export default function Calendar() {
-
+    const navigate = useNavigate();
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [holiday, setHoliday] = useState<holidayDto[]>([]);
     const [memo, setMemo] = useState<memoDto[]>([]);
@@ -147,6 +148,10 @@ export default function Calendar() {
     }
 
     function handleClickDay(id: Date) {
+        navigate('/day');
+    }
+
+    function handleClickCreateMemo(id: Date) {
         let savedTime = formatter('savedTimeFormatter', id.toISOString())
         setMemoDetail(defaultMemo);
         setSavedTime(savedTime);
@@ -185,6 +190,7 @@ export default function Calendar() {
                                     memo: memo
                                 }}
                             handleClickDay={handleClickDay}
+                            handleClickCreateMemo={handleClickCreateMemo}
                             handleClickMemo={handleClickMemo}
                             handleDeleteMemo={handleDeleteMemo}
                         />

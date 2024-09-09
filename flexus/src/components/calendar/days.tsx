@@ -3,7 +3,7 @@ import {startOfMonth, startOfWeek, addDays, addWeeks } from 'date-fns';
 import formatter from '../../utils/formatter.util'
 import {holidayDto} from '../../Dto/calendar.dto';
 import {memoDto} from '../../Dto/memo.dto'
-import { BiX } from "react-icons/bi";
+import { BiX, BiSolidPlusSquare } from "react-icons/bi";
 
 interface CalendarProps {
     dataParams: {
@@ -12,12 +12,13 @@ interface CalendarProps {
         memo: memoDto[];
     };
     handleClickDay: (id: Date) => void;
+    handleClickCreateMemo: (id: Date) => void;
     handleClickMemo: (id: any) => void;
     handleDeleteMemo: (id: any) => void;
 }
 
 
-export default function CalendarDays({ dataParams, handleClickDay, handleClickMemo, handleDeleteMemo } : CalendarProps) {
+export default function CalendarDays({ dataParams, handleClickDay, handleClickCreateMemo, handleClickMemo, handleDeleteMemo } : CalendarProps) {
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let monthStart = startOfMonth(dataParams.month);
     let startDate = startOfWeek(monthStart);
@@ -40,14 +41,16 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickMe
         return '';
     }
 
-    function handleDetailMemo(e: React.MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation();
-        handleClickMemo((e.target as HTMLButtonElement).dataset.key);
+    function handleCreateMemo(day : Date) {
+        handleClickCreateMemo(day);
     }
 
-    function handleClickDeleteMemo(e: React.MouseEvent<HTMLButtonElement>) {
-        e.stopPropagation();
-       handleDeleteMemo((e.currentTarget as HTMLButtonElement).dataset.key);
+    function handleDetailMemo(id : number) {
+        handleClickMemo(id);
+    }
+
+    function handleClickDeleteMemo(id : number) {
+       handleDeleteMemo(id);
     }
 
     while (count <= 4 ) {
@@ -78,18 +81,41 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickMe
 
             days.push(
                 <div className={divClassName} id={savedTime} key={savedTime} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
-                    <div>
+                    <div className="day-header">
+                        <div>
                         <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
                         {isHoliday && (
                             <span className={spanClassName}>{isHoliday}</span>
                         )}
+                        </div>
+                        {divClassName != 'day-gray' && (
+                            <div>
+                                <button className="memo-create-button" onClick={
+                                    (e) => {
+                                        e.stopPropagation();
+                                        handleCreateMemo(day);
+                                    }
+                                }>
+                                    <BiSolidPlusSquare/></button>
+                            </div>
+                        )}
                     </div>
                     <div>
                         {filteredData.length > 0 && filteredData.map((data) => (
-                            <span className="badge" data-key={data.id} key={data.id} onClick={handleDetailMemo} >{data.title}
+                            <span className="badge" key={data.id} onClick={
+                                (e) => {
+                                    e.stopPropagation();
+                                    handleDetailMemo(data.id);
+                                }
+                            }>{data.title}
                                 <div className="flex">
-                                     <p data-key={data.id}>{formatter('startEndTimeFormatter',data.starttime)} ~ {formatter('startEndTimeFormatter',data.starttime)}</p>
-                                    <button className="memo-delete-button" data-key={data.id} onClick={handleClickDeleteMemo}><BiX/></button>
+                                     <p>{formatter('startEndTimeFormatter',data.starttime)} ~ {formatter('startEndTimeFormatter',data.starttime)}</p>
+                                    <button className="memo-delete-button" onClick={
+                                        (e) => {
+                                            e.stopPropagation();
+                                            handleClickDeleteMemo(data.id);
+                                        }
+                                    }><BiX/></button>
                                 </div>
                             </span>
                         ))}

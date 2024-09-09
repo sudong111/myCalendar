@@ -1,11 +1,8 @@
-import Main from "../pages/main"
-import Layout from "../components/layout/layout"
-import React from "react"
+import React from "react";
+import Calendar from "../components/calendar/calendar";
 
 export default function Home() {
   return (
-      <Layout>
-        <Main />
-      </Layout>
+      <Calendar/>
   )
 }
