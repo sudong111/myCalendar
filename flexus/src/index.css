@@ -24,7 +24,7 @@
 }
 
 .card {
-  @apply block max-w-sm m-4 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700;
+  @apply block max-w-sm m-4 p-4 bg-white border border-gray-200 rounded-lg shadow;
   font-family: 'main-font';
 }
 
@@ -85,6 +85,10 @@
   @apply flex text-2xl;
 }
 
+.memo-closed-button {
+  @apply ml-1
+}
+
 /*Calendar*/
 .calendar {
   @apply flex flex-col w-full h-full;
@@ -116,7 +120,7 @@
 }
 
 .day {
-  @apply flex flex-col flex-1 border-r-2 border-blue-50 text-gray-500 hover:bg-gray-50 justify-between;
+  @apply flex flex-col flex-1 border-r-2 border-blue-50 text-gray-500 hover:bg-gray-50 cursor-pointer justify-between;
   font-family: 'main-font';
 }
 
@@ -126,7 +130,7 @@
 }
 
 .badge {
-  @apply flex justify-between bg-green-100 text-green-800 text-xs font-medium m-2 px-2.5 py-0.5 rounded;
+  @apply flex justify-between bg-green-200 text-green-800 text-xs font-medium m-2 px-1 py-0.5 rounded cursor-pointer hover:bg-green-100;
   font-family: 'main-font';
 }
 

@@ -3,7 +3,7 @@ import CalendarHeader from './header';
 import CalendarWeek from './week';
 import CalendarDays from './days';
 import SideMemo from './side-memo';
-import dateFormat from './date-format'
+import formatter from '../../utils/formatter.util'
 import {holidayDto} from '../../Dto/calendar.dto';
 import {memoDto} from '../../Dto/memo.dto'
 import axios from 'axios';
@@ -13,15 +13,24 @@ export default function Calendar() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [holiday, setHoliday] = useState<holidayDto[]>([]);
     const [memo, setMemo] = useState<memoDto[]>([]);
-    const [dataLoaded, setDataLoaded] = useState(false);
-    const [show, setShow] = useState(false);
-    const [submitMemo, setSubmitMemo] = useState(false);
     const [savedTime, setSavedTime] = useState('');
+    const defaultMemo = {
+        id:0,
+        title: '',
+        savedtime: savedTime,
+        starttime: '00:00',
+        endtime: '00:00',
+        memo: ''
+    }
+    const [memoDetail, setMemoDetail] = useState<memoDto>(defaultMemo);
+    const [dataLoaded, setDataLoaded] = useState(false);
+    const [memoShow, setMemoShow] = useState(false);
+    const [submitMemo, setSubmitMemo] = useState(false);
 
     async function getMemo() {
         try {
             const params = {
-                savedTime: currentMonth.getFullYear() + '-' + dateFormat(currentMonth.getMonth()+1)
+                savedTime: currentMonth.getFullYear() + '-' + (currentMonth.getMonth()+1)
             };
 
             const response = await axios.get('http://localhost:8080/api/memo', { params });
@@ -98,13 +107,29 @@ export default function Calendar() {
     }
 
     function handleClickDay(id: Date) {
-        let savedTime = id.getFullYear() + '-' + dateFormat(id.getMonth()+1) + '-' + dateFormat(id.getDate());
-        setShow(true);
+        let savedTime = id.getFullYear() + '-' + formatter('twoDigitsFormatter',(id.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter', (id.getDate()).toString());
+        setMemoDetail(defaultMemo);
         setSavedTime(savedTime);
+        setMemoShow(true);
+    }
+
+    async function handleClickMemo(id: number) {
+        try {
+            const params = {
+                id: id
+            };
+
+            const response = await axios.get('http://localhost:8080/api/memo/detail', { params });
+            setMemoDetail(response.data);
+            setMemoShow(true);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     }
 
     function handleCloseButton() {
-        setShow(false);
+        setMemoShow(false);
     }
 
     return (
@@ -126,14 +151,16 @@ export default function Calendar() {
                                     memo: memo
                                 }}
                             handleClickDay={handleClickDay}
+                            handleClickMemo={handleClickMemo}
                         />
                     )}
                 </div>
                 <SideMemo
                     dataParams={
                         {
-                            show: show,
-                            savedTime: savedTime
+                            show: memoShow,
+                            savedTime: savedTime,
+                            memoDetail: memoDetail
                         }}
                     handleCloseButton={handleCloseButton}
                     handleSubmitMemo={handleSubmitMemo}/>

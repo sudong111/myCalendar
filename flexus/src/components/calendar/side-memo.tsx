@@ -1,6 +1,4 @@
-import axios from "axios";
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {memoDto} from '../../Dto/memo.dto';
 import { BiX, BiCheck, BiTime } from "react-icons/bi";
 
@@ -8,21 +6,18 @@ interface SideMemoProps {
     dataParams: {
         show: boolean;
         savedTime: string;
+        memoDetail: memoDto;
     }
     handleCloseButton: () => void;
     handleSubmitMemo: (memo: memoDto) => void;
 }
 
 export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMemo } : SideMemoProps) {
-    console.log(dataParams.savedTime)
-    const [memo, setMemo] = useState<memoDto>({
-        id:0,
-        title: '',
-        savedtime: dataParams.savedTime,
-        starttime: '00:00',
-        endtime: '00:00',
-        memo: ''
-    });
+    const [memo, setMemo] = useState<memoDto>(dataParams.memoDetail);
+
+    useEffect(() => {
+        setMemo(dataParams.memoDetail);
+    }, [dataParams.memoDetail]);
 
     function handleChangedValues(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const { name, value } = e.target;
@@ -42,6 +37,7 @@ export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMe
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">
                 <p className="title">Memo</p>
+                <p></p>
                 <button className="side-closed-button" onClick={handleCloseButton}><BiX/></button>
             </div>
             <div className="side-memo-title">

@@ -1,8 +1,9 @@
+import React from 'react';
 import {startOfMonth, startOfWeek, addDays, addWeeks } from 'date-fns';
-import dateFormat from './date-format'
+import formatter from '../../utils/formatter.util'
 import {holidayDto} from '../../Dto/calendar.dto';
 import {memoDto} from '../../Dto/memo.dto'
-import React from 'react';
+import { BiX } from "react-icons/bi";
 
 interface CalendarProps {
     dataParams: {
@@ -11,10 +12,11 @@ interface CalendarProps {
         memo: memoDto[];
     };
     handleClickDay: (id: Date) => void;
+    handleClickMemo: (id: any) => void;
 }
 
 
-export default function CalendarDays({ dataParams, handleClickDay } : CalendarProps) {
+export default function CalendarDays({ dataParams, handleClickDay, handleClickMemo } : CalendarProps) {
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let monthStart = startOfMonth(dataParams.month);
     let startDate = startOfWeek(monthStart);
@@ -37,8 +39,14 @@ export default function CalendarDays({ dataParams, handleClickDay } : CalendarPr
         return '';
     }
 
-    function formatTime(value: string) {
-        return value.substring(0, 5);
+    function handleDetailMemo(e: React.MouseEvent<HTMLButtonElement>) {
+        e.stopPropagation();
+        handleClickMemo((e.target as HTMLButtonElement).dataset.key);
+    }
+
+    function handleRemoveMemo(e: React.MouseEvent<HTMLButtonElement>) {
+        e.stopPropagation();
+        console.log("remove")
     }
 
     while (count <= 4 ) {
@@ -60,7 +68,7 @@ export default function CalendarDays({ dataParams, handleClickDay } : CalendarPr
                 spanClassName += ' text-red';
             }
 
-            savedTime = day.getFullYear() + '-' + dateFormat(day.getMonth()+1) + '-' + dateFormat(day.getDate()-1);
+            savedTime = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()-1).toString());
 
             let filteredData = dataParams.memo.filter(item => {
                 const data = new Date(item.savedtime).toISOString().split('T')[0];
@@ -77,8 +85,11 @@ export default function CalendarDays({ dataParams, handleClickDay } : CalendarPr
                     </div>
                     <div>
                         {filteredData.length > 0 && filteredData.map((data) => (
-                            <span className="badge" key={data.id}>{data.title}
-                                <p>{formatTime(data.starttime)} ~ {formatTime(data.endtime)}</p>
+                            <span className="badge" data-key={data.id} key={data.id} onClick={handleDetailMemo} >{data.title}
+                                <div className="flex">
+                                     <p data-key={data.id}>{formatter('savedTimeFormatter',data.starttime)} ~ {formatter('savedTimeFormatter',data.starttime)}</p>
+                                    <button className="memo-closed-button" onClick={handleRemoveMemo}><BiX/></button>
+                                </div>
                             </span>
                         ))}
                     </div>

@@ -31,6 +31,21 @@ router.get('/memo', async (req, res) => {
         console.error('Error executing query', err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-})
+});
+
+router.get('/memo/detail', async (req, res) => {
+    const { id } = req.query;
+    try {
+        const result = await pool.query(
+            `SELECT * FROM memo
+             WHERE id= $1`,
+            [id]
+        );
+        res.status(200).json(result.rows[0]);
+    } catch (err) {
+        console.error('Error executing query', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 export default router;
