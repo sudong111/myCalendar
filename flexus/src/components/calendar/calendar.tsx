@@ -25,7 +25,7 @@ export default function Calendar() {
     const [memoDetail, setMemoDetail] = useState<memoDto>(defaultMemo);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [memoShow, setMemoShow] = useState(false);
-    const [submitMemo, setSubmitMemo] = useState(false);
+    const [isMemoChanged, setIsMemoChanged] = useState(false);
 
     async function getMemo() {
         try {
@@ -80,7 +80,7 @@ export default function Calendar() {
                 body: newMemo
             });
 
-            setSubmitMemo((prev) => !prev);
+            setIsMemoChanged((prev) => !prev);
 
             const result = await response.data;
             console.log('Post successful:', result);
@@ -90,24 +90,39 @@ export default function Calendar() {
         }
     }
 
-    useEffect(() => {
-        setDataLoaded(false);
-        getDate();
-    }, [currentMonth]);
+    async function handleModifyMemo(newMemo: memoDto) {
+        try {
+            const response = await axios.put('http://localhost:8080/api/memo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: newMemo
+            });
 
-    useEffect(() => {
-        getMemo();
-    }, [submitMemo, memoShow]);
+            setIsMemoChanged((prev) => !prev);
 
-    function handleChangeMonth(newMonth: Date) {
-        setCurrentMonth(newMonth);
+            const result = await response.data;
+            console.log('Post successful:', result);
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
-    function handleClickDay(id: Date) {
-        let savedTime = formatter('savedTimeFormatter', id.toISOString())
-        setMemoDetail(defaultMemo);
-        setSavedTime(savedTime);
-        setMemoShow(true);
+    async function handleDeleteMemo(id: number) {
+        try {
+            const params = {
+                id: id
+            };
+
+            const response = await axios.delete('http://localhost:8080/api/memo', { params });
+            setMemoShow(false);
+            setIsMemoChanged((prev) => !prev);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     }
 
     async function handleClickMemo(id: number) {
@@ -127,24 +142,29 @@ export default function Calendar() {
         }
     }
 
-    async function handleDeleteMemo(id: number) {
-        try {
-            const params = {
-                id: id
-            };
+    function handleChangeMonth(newMonth: Date) {
+        setCurrentMonth(newMonth);
+    }
 
-            const response = await axios.delete('http://localhost:8080/api/memo', { params });
-            setMemoShow(false);
-            console.log(response);
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+    function handleClickDay(id: Date) {
+        let savedTime = formatter('savedTimeFormatter', id.toISOString())
+        setMemoDetail(defaultMemo);
+        setSavedTime(savedTime);
+        setMemoShow(true);
     }
 
     function handleCloseButton() {
         setMemoShow(false);
     }
+
+    useEffect(() => {
+        setDataLoaded(false);
+        getDate();
+    }, [currentMonth]);
+
+    useEffect(() => {
+        getMemo();
+    }, [isMemoChanged, memoShow]);
 
     return (
         <div className="calendar">
@@ -178,7 +198,9 @@ export default function Calendar() {
                             memoDetail: memoDetail
                         }}
                     handleCloseButton={handleCloseButton}
-                    handleSubmitMemo={handleSubmitMemo}/>
+                    handleSubmitMemo={handleSubmitMemo}
+                    handleModifyMemo={handleModifyMemo}
+                    handleDeleteMemo={handleDeleteMemo}/>
             </div>
         </div>
     )

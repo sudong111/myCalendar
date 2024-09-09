@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {memoDto} from '../../Dto/memo.dto';
-import { BiX, BiCheck, BiTime } from "react-icons/bi";
+import { BiX, BiPlus, BiTime, BiPencil, BiTrash } from "react-icons/bi";
 
 interface SideMemoProps {
     dataParams: {
@@ -10,12 +10,12 @@ interface SideMemoProps {
     }
     handleCloseButton: () => void;
     handleSubmitMemo: (memo: memoDto) => void;
+    handleModifyMemo: (memo: memoDto) => void;
+    handleDeleteMemo: (id: any) => void;
 }
 
-export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMemo } : SideMemoProps) {
+export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMemo, handleModifyMemo, handleDeleteMemo } : SideMemoProps) {
     const [memo, setMemo] = useState<memoDto>(dataParams.memoDetail);
-
-    console.log(dataParams.savedTime);
 
     useEffect(() => {
         setMemo(dataParams.memoDetail);
@@ -30,16 +30,25 @@ export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMe
         }));
     }
 
-    async function handleSubmitButton() {
-        const newMemo = memo;
-        handleSubmitMemo(newMemo);
+    function handleSubmitButton() {
+        handleSubmitMemo(memo);
+    }
+
+    function handleModifyButton() {
+        handleModifyMemo(memo);
+    }
+
+    function handleDeleteButton() {
+        handleDeleteMemo(memo.id);
     }
 
     return (
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">
-                <p className="title">Memo</p>
-                <p>{dataParams.savedTime}</p>
+                <div className="side-title">
+                    <p className="title">Memo</p>
+                    <p className="desc">({dataParams.savedTime})</p>
+                </div>
                 <button className="side-close-button" onClick={handleCloseButton}><BiX/></button>
             </div>
             <div className="side-memo-title">
@@ -69,7 +78,20 @@ export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMe
                           placeholder="메모를 작성하세요."></textarea>
             </div>
             <div className="side-confirm">
-                <button className="side-confirm-button" onClick={handleSubmitButton}><BiCheck/></button>
+                {memo.id === 0 ? (
+                    <button className="side-confirm-button" onClick={handleSubmitButton}>
+                        <BiPlus />
+                    </button>
+                ) : (
+                    <>
+                        <button className="side-confirm-button" onClick={handleModifyButton}>
+                            <BiPencil />
+                        </button>
+                        <button className="side-delete-button" onClick={handleDeleteButton}>
+                            <BiTrash />
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     )
