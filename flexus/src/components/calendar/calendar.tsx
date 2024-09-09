@@ -15,6 +15,7 @@ export default function Calendar() {
     const [memo, setMemo] = useState<memoDto[]>([]);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [show, setShow] = useState(false);
+    const [submitMemo, setSubmitMemo] = useState(false);
     const [savedTime, setSavedTime] = useState('');
 
     async function getMemo() {
@@ -60,11 +61,37 @@ export default function Calendar() {
         }
     };
 
+    async function handleSubmitMemo(newMemo: memoDto) {
+        try {
+            const response = await fetch('http://localhost:8080/api/memo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newMemo)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            setSubmitMemo((prev) => !prev);
+
+            const result = await response.json();
+            console.log('Post successful:', result);
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     useEffect(() => {
         setDataLoaded(false);
         getDate();
-        getMemo();
     }, [currentMonth]);
+
+    useEffect(() => {
+        getMemo();
+    }, [submitMemo]);
 
     function handleChangeMonth(newMonth: Date) {
         setCurrentMonth(newMonth);
@@ -74,7 +101,6 @@ export default function Calendar() {
         let savedTime = id.getFullYear() + '-' + dateFormat(id.getMonth()+1) + '-' + dateFormat(id.getDate());
         setShow(true);
         setSavedTime(savedTime);
-        console.log(savedTime)
     }
 
     function handleCloseButton() {
@@ -109,7 +135,8 @@ export default function Calendar() {
                             show: show,
                             savedTime: savedTime
                         }}
-                    handleCloseButton={handleCloseButton}/>
+                    handleCloseButton={handleCloseButton}
+                    handleSubmitMemo={handleSubmitMemo}/>
             </div>
         </div>
     )

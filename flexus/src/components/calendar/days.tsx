@@ -60,16 +60,12 @@ export default function CalendarDays({ dataParams, handleClickDay } : CalendarPr
                 spanClassName += ' text-red';
             }
 
-            savedTime = day.getFullYear() + '-' + dateFormat(day.getMonth()+1) + '-' + dateFormat(day.getDate());
+            savedTime = day.getFullYear() + '-' + dateFormat(day.getMonth()+1) + '-' + dateFormat(day.getDate()-1);
 
             let filteredData = dataParams.memo.filter(item => {
                 const data = new Date(item.savedtime).toISOString().split('T')[0];
                 return data === savedTime;
             });
-
-            function test() {
-
-            }
 
             days.push(
                 <div className={divClassName} id={savedTime} key={savedTime} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>

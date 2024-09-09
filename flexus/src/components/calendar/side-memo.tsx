@@ -10,9 +10,10 @@ interface SideMemoProps {
         savedTime: string;
     }
     handleCloseButton: () => void;
+    handleSubmitMemo: (memo: memoDto) => void;
 }
 
-export default function SideMemo({ dataParams, handleCloseButton } : SideMemoProps) {
+export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMemo } : SideMemoProps) {
     console.log(dataParams.savedTime)
     const [memo, setMemo] = useState<memoDto>({
         id:0,
@@ -30,34 +31,14 @@ export default function SideMemo({ dataParams, handleCloseButton } : SideMemoPro
             [name]: value,
             savedtime: dataParams.savedTime
         }));
-        console.log(memo);
     }
 
-    async function handleConfirmedButton() {
-        console.log(memo);
-        try {
-            const response = await fetch('http://localhost:8080/api/memo', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(memo)
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const result = await response.json();
-            console.log('Post successful:', result);
-
-        } catch (error) {
-            console.error('Error:', error);
-        }
+    async function handleSubmitButton() {
+        const newMemo = memo;
+        handleSubmitMemo(newMemo);
     }
 
     return (
-
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">
                 <p className="title">Memo</p>
@@ -90,7 +71,7 @@ export default function SideMemo({ dataParams, handleCloseButton } : SideMemoPro
                           placeholder="메모를 작성하세요."></textarea>
             </div>
             <div className="side-confirm">
-                <button className="side-confirmed-button" onClick={handleConfirmedButton}><BiCheck/></button>
+                <button className="side-confirmed-button" onClick={handleSubmitButton}><BiCheck/></button>
             </div>
         </div>
     )
