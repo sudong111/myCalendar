@@ -69,10 +69,10 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickMe
                 spanClassName += ' text-red';
             }
 
-            savedTime = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()-1).toString());
+            savedTime = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
 
             let filteredData = dataParams.memo.filter(item => {
-                const data = new Date(item.savedtime).toISOString().split('T')[0];
+                const data = formatter('savedTimeFormatter',item.savedtime);
                 return data === savedTime;
             });
 
@@ -88,7 +88,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickMe
                         {filteredData.length > 0 && filteredData.map((data) => (
                             <span className="badge" data-key={data.id} key={data.id} onClick={handleDetailMemo} >{data.title}
                                 <div className="flex">
-                                     <p data-key={data.id}>{formatter('savedTimeFormatter',data.starttime)} ~ {formatter('savedTimeFormatter',data.starttime)}</p>
+                                     <p data-key={data.id}>{formatter('startEndTimeFormatter',data.starttime)} ~ {formatter('startEndTimeFormatter',data.starttime)}</p>
                                     <button className="memo-delete-button" data-key={data.id} onClick={handleClickDeleteMemo}><BiX/></button>
                                 </div>
                             </span>

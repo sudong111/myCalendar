@@ -77,7 +77,7 @@ export default function Calendar() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(newMemo)
+                body: newMemo
             });
 
             setSubmitMemo((prev) => !prev);
@@ -104,7 +104,7 @@ export default function Calendar() {
     }
 
     function handleClickDay(id: Date) {
-        let savedTime = id.getFullYear() + '-' + formatter('twoDigitsFormatter',(id.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter', (id.getDate()).toString());
+        let savedTime = formatter('savedTimeFormatter', id.toISOString())
         setMemoDetail(defaultMemo);
         setSavedTime(savedTime);
         setMemoShow(true);
@@ -118,6 +118,8 @@ export default function Calendar() {
 
             const response = await axios.get('http://localhost:8080/api/memo/detail', { params });
             setMemoDetail(response.data);
+
+            setSavedTime(formatter('savedTimeFormatter',response.data.savedtime));
             setMemoShow(true);
 
         } catch (error) {

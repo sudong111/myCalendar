@@ -15,6 +15,8 @@ interface SideMemoProps {
 export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMemo } : SideMemoProps) {
     const [memo, setMemo] = useState<memoDto>(dataParams.memoDetail);
 
+    console.log(dataParams.savedTime);
+
     useEffect(() => {
         setMemo(dataParams.memoDetail);
     }, [dataParams.memoDetail]);
@@ -37,6 +39,7 @@ export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMe
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">
                 <p className="title">Memo</p>
+                <p>{dataParams.savedTime}</p>
                 <button className="side-close-button" onClick={handleCloseButton}><BiX/></button>
             </div>
             <div className="side-memo-title">

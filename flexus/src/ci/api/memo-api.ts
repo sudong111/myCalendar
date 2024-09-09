@@ -4,7 +4,7 @@ import pool from '../server/db'
 const router = Router();
 
 router.post('/memo', async (req, res) => {
-    const { title, savedtime, starttime, endtime, memo } = req.body;
+    const { title, savedtime, starttime, endtime, memo } = req.body.body;
     try {
         const result = await pool.query(
             'INSERT INTO memo (title, savedtime, starttime, endtime, memo) VALUES ($1, $2, $3, $4, $5) RETURNING *',

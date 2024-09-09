@@ -13,6 +13,8 @@ app.use(express.json());
 // API 라우트 설정
 app.use('/api', apiRoutes);
 
+app.use(express.json());
+
 app.use(express.static(path.join(__dirname, '../build')));
 
 app.get('*', (req, res) => {
