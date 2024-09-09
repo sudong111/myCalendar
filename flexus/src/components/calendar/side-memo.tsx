@@ -46,7 +46,9 @@ export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMe
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">
                 <div className="side-title">
-                    <p className="title">Memo</p>
+                    <p className="title">
+                        메모 {memo.id === 0 ? '생성' : '수정'}
+                    </p>
                     <p className="desc">({dataParams.savedTime})</p>
                 </div>
                 <button className="side-close-button" onClick={handleCloseButton}><BiX/></button>
