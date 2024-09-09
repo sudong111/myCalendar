@@ -13,10 +13,11 @@ interface CalendarProps {
     };
     handleClickDay: (id: Date) => void;
     handleClickMemo: (id: any) => void;
+    handleDeleteMemo: (id: any) => void;
 }
 
 
-export default function CalendarDays({ dataParams, handleClickDay, handleClickMemo } : CalendarProps) {
+export default function CalendarDays({ dataParams, handleClickDay, handleClickMemo, handleDeleteMemo } : CalendarProps) {
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let monthStart = startOfMonth(dataParams.month);
     let startDate = startOfWeek(monthStart);
@@ -44,9 +45,9 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickMe
         handleClickMemo((e.target as HTMLButtonElement).dataset.key);
     }
 
-    function handleRemoveMemo(e: React.MouseEvent<HTMLButtonElement>) {
+    function handleClickDeleteMemo(e: React.MouseEvent<HTMLButtonElement>) {
         e.stopPropagation();
-        console.log("remove")
+       handleDeleteMemo((e.currentTarget as HTMLButtonElement).dataset.key);
     }
 
     while (count <= 4 ) {
@@ -88,7 +89,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickMe
                             <span className="badge" data-key={data.id} key={data.id} onClick={handleDetailMemo} >{data.title}
                                 <div className="flex">
                                      <p data-key={data.id}>{formatter('savedTimeFormatter',data.starttime)} ~ {formatter('savedTimeFormatter',data.starttime)}</p>
-                                    <button className="memo-closed-button" onClick={handleRemoveMemo}><BiX/></button>
+                                    <button className="memo-delete-button" data-key={data.id} onClick={handleClickDeleteMemo}><BiX/></button>
                                 </div>
                             </span>
                         ))}

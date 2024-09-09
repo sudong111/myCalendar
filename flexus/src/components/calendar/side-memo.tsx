@@ -37,8 +37,7 @@ export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMe
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">
                 <p className="title">Memo</p>
-                <p></p>
-                <button className="side-closed-button" onClick={handleCloseButton}><BiX/></button>
+                <button className="side-close-button" onClick={handleCloseButton}><BiX/></button>
             </div>
             <div className="side-memo-title">
                 <p>title</p>
@@ -67,7 +66,7 @@ export default function SideMemo({ dataParams, handleCloseButton, handleSubmitMe
                           placeholder="메모를 작성하세요."></textarea>
             </div>
             <div className="side-confirm">
-                <button className="side-confirmed-button" onClick={handleSubmitButton}><BiCheck/></button>
+                <button className="side-confirm-button" onClick={handleSubmitButton}><BiCheck/></button>
             </div>
         </div>
     )

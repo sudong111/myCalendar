@@ -72,7 +72,7 @@ export default function Calendar() {
 
     async function handleSubmitMemo(newMemo: memoDto) {
         try {
-            const response = await fetch('http://localhost:8080/api/memo', {
+            const response = await axios.post('http://localhost:8080/api/memo', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -80,12 +80,9 @@ export default function Calendar() {
                 body: JSON.stringify(newMemo)
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
             setSubmitMemo((prev) => !prev);
 
-            const result = await response.json();
+            const result = await response.data;
             console.log('Post successful:', result);
 
         } catch (error) {
@@ -100,7 +97,7 @@ export default function Calendar() {
 
     useEffect(() => {
         getMemo();
-    }, [submitMemo]);
+    }, [submitMemo, memoShow]);
 
     function handleChangeMonth(newMonth: Date) {
         setCurrentMonth(newMonth);
@@ -122,6 +119,21 @@ export default function Calendar() {
             const response = await axios.get('http://localhost:8080/api/memo/detail', { params });
             setMemoDetail(response.data);
             setMemoShow(true);
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    async function handleDeleteMemo(id: number) {
+        try {
+            const params = {
+                id: id
+            };
+
+            const response = await axios.delete('http://localhost:8080/api/memo', { params });
+            setMemoShow(false);
+            console.log(response);
 
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -152,6 +164,7 @@ export default function Calendar() {
                                 }}
                             handleClickDay={handleClickDay}
                             handleClickMemo={handleClickMemo}
+                            handleDeleteMemo={handleDeleteMemo}
                         />
                     )}
                 </div>

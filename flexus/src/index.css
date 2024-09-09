@@ -15,17 +15,14 @@
 
 .header {
   @apply w-full p-4 border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 text-center;
-  font-family: 'main-font';
 }
 
 .title {
   @apply text-2xl font-bold tracking-tight text-gray-900;
-  font-family: 'main-font';
 }
 
 .card {
   @apply block max-w-sm m-4 p-4 bg-white border border-gray-200 rounded-lg shadow;
-  font-family: 'main-font';
 }
 
 /*side-memo*/
@@ -42,17 +39,14 @@
 
 .side-header {
   @apply w-full h-12 p-3 flex justify-between items-center;
-  font-family: 'main-font';
 }
 
 .side-memo-title {
   @apply flex w-full h-12 p-3;
-  font-family: 'main-font';
 }
 
 .input {
   @apply border-gray-200 text-gray-900 text-sm rounded-lg border-2 focus:ring-blue-200 focus:border-blue-200 block w-full ml-2;
-  font-family: 'main-font';
 }
 
 .timer {
@@ -61,32 +55,30 @@
 
 .side-select-time {
   @apply flex w-full h-12 p-3;
-  font-family: 'main-font';
 }
 
 .side-textarea {
   @apply w-full h-full p-3;
-  font-family: 'main-font';
 }
 
 .textarea {
   @apply block p-2.5 w-full h-full text-sm text-gray-900 rounded-lg border-2 border-gray-200 focus:ring-blue-200 focus:border-blue-200 resize-none;
 }
 
-.side-confirmed-button {
-  @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2;
-}
-
 .side-confirm {
   @apply flex flex-row-reverse w-full h-16 p-3
 }
 
-.side-closed-button {
+.side-confirm-button {
+  @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2;
+}
+
+.side-close-button {
   @apply flex text-2xl;
 }
 
-.memo-closed-button {
-  @apply ml-1
+.memo-delete-button {
+  @apply pl-1
 }
 
 /*Calendar*/
@@ -96,10 +88,9 @@
 
 .calendar-header {
   @apply flex justify-between w-full p-4 border border-blue-50 bg-blue-50 text-center;
-  font-family: 'main-font';
 }
 
-.calendar-button {
+.month-change-button {
   @apply flex text-2xl;
 }
 
@@ -121,33 +112,27 @@
 
 .day {
   @apply flex flex-col flex-1 border-r-2 border-blue-50 text-gray-500 hover:bg-gray-50 cursor-pointer justify-between;
-  font-family: 'main-font';
 }
 
 .day-gray {
   @apply flex flex-1 border-r-2 border-blue-50 text-gray-500 justify-between;
-  font-family: 'main-font';
 }
 
 .badge {
   @apply flex justify-between bg-green-200 text-green-800 text-xs font-medium m-2 px-1 py-0.5 rounded cursor-pointer hover:bg-green-100;
-  font-family: 'main-font';
 }
 
 .text {
   @apply text-xs text-gray-500 pr-1 pl-1;
-  font-family: 'main-font';
 }
 
 .text-gray {
   color: #d1d5db !important;
-  font-family: 'main-font';
 }
 
 .text-red {
   @apply text-xs;
   color: #f05252 !important;
-  font-family: 'main-font';
 }
 
 #Sun {
@@ -161,8 +146,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, 'main-font',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
