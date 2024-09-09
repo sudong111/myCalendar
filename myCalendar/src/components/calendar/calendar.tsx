@@ -148,7 +148,7 @@ export default function Calendar() {
     }
 
     function handleClickDay(id: Date) {
-        navigate('/day');
+        navigate('day');
     }
 
     function handleClickCreateMemo(id: Date) {

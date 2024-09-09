@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
     <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route path="/myCalendar" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="day" element={<Day />} />
             </Route>
