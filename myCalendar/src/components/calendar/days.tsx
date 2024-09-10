@@ -12,13 +12,13 @@ interface CalendarProps {
         memo: memoDto[];
     };
     handleClickDay: (id: Date) => void;
-    handleClickCreateMemo: (id: Date) => void;
-    handleClickMemo: (id: any) => void;
+    handleCreateMemo: (id: Date) => void;
+    handleDetailMemo: (id: any) => void;
     handleDeleteMemo: (id: any) => void;
 }
 
 
-export default function CalendarDays({ dataParams, handleClickDay, handleClickCreateMemo, handleClickMemo, handleDeleteMemo } : CalendarProps) {
+export default function CalendarDays({ dataParams, handleClickDay, handleCreateMemo, handleDetailMemo, handleDeleteMemo } : CalendarProps) {
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let monthStart = startOfMonth(dataParams.month);
     let startDate = startOfWeek(monthStart);
@@ -41,12 +41,12 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickCr
         return '';
     }
 
-    function handleCreateMemo(day : Date) {
-        handleClickCreateMemo(day);
+    function handleClickCreateMemo(day : Date) {
+        handleCreateMemo(day);
     }
 
-    function handleDetailMemo(id : number) {
-        handleClickMemo(id);
+    function handleClickDetailMemo(id : number) {
+        handleDetailMemo(id);
     }
 
     function handleClickDeleteMemo(id : number) {
@@ -93,7 +93,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickCr
                                 <button className="memo-create-button" onClick={
                                     (e) => {
                                         e.stopPropagation();
-                                        handleCreateMemo(day);
+                                        handleClickCreateMemo(day);
                                     }
                                 }>
                                     <BiSolidPlusSquare/></button>
@@ -105,7 +105,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleClickCr
                             <span className="badge" key={data.id} onClick={
                                 (e) => {
                                     e.stopPropagation();
-                                    handleDetailMemo(data.id);
+                                    handleClickDetailMemo(data.id);
                                 }
                             }>{data.title}
                                 <div className="flex">

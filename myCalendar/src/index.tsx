@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
-import Day from './pages/day';
 import Layout from "./components/layout/layout";
 import Home from './pages/home';
 import './index.css';
@@ -16,7 +15,6 @@ root.render(
         <Routes>
             <Route path="/myCalendar" element={<Layout />}>
                 <Route index element={<Home />} />
-                <Route path="day" element={<Day />} />
             </Route>
         </Routes>
     </BrowserRouter>

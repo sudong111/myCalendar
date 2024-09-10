@@ -4,11 +4,11 @@ import pool from '../server/db'
 const router = Router();
 
 router.post('/memo', async (req, res) => {
-    const { title, savedtime, starttime, endtime, memo } = req.body.body;
+    const { title, startday, endday, starttime, endtime, memo } = req.body.body;
     try {
         const result = await pool.query(
-            'INSERT INTO memo (title, savedtime, starttime, endtime, memo) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [title, savedtime, starttime, endtime, memo]
+            'INSERT INTO memo (title, startday, endday, starttime, endtime, memo) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [title, startday, endday, starttime, endtime, memo]
         );
         res.status(200).json(result.rows[0]);
     } catch (err) {
@@ -17,6 +17,7 @@ router.post('/memo', async (req, res) => {
     }
 });
 
+//Todo 수정필요
 router.get('/memo', async (req, res) => {
     const { savedTime } = req.query;
     try {
@@ -49,11 +50,11 @@ router.delete('/memo', async (req, res) => {
 });
 
 router.put('/memo', async (req, res) => {
-    const { title, savedtime, starttime, endtime, memo, id } = req.body.body;
+    const { title, startday, endday, starttime, endtime, memo, id } = req.body.body;
     try {
         const result = await pool.query(
-            'UPDATE memo SET title = $1, savedtime = $2, starttime = $3, endtime = $4, memo = $5 WHERE id = $6 RETURNING *',
-            [title, savedtime, starttime, endtime, memo, id]
+            'UPDATE memo SET title = $1, startday = $2, endday = $3, starttime = $4, endtime = $5,  memo = $6 WHERE id = $7 RETURNING *',
+            [title, startday, endday, starttime, endtime, memo, id]
         );
         res.status(200).json(result.rows[0]);
     } catch (err) {

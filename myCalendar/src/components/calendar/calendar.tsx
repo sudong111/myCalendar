@@ -1,5 +1,4 @@
-import React, {useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import CalendarHeader from './header';
 import CalendarWeek from './week';
@@ -10,13 +9,15 @@ import {holidayDto} from '../../Dto/calendar.dto';
 import {memoDto} from '../../Dto/memo.dto'
 
 export default function Calendar() {
-    const navigate = useNavigate();
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [holiday, setHoliday] = useState<holidayDto[]>([]);
     const [memo, setMemo] = useState<memoDto[]>([]);
     const [savedTime, setSavedTime] = useState('');
+    const [loadData, setLoadData] = useState(false);
+    const [showMemo, setShowMemo] = useState(false);
+    const [changeMemo, setChangeMemo] = useState(false);
     const defaultMemo = {
-        id:0,
+        id: 0,
         title: '',
         savedtime: savedTime,
         starttime: '00:00',
@@ -24,23 +25,20 @@ export default function Calendar() {
         memo: ''
     }
     const [memoDetail, setMemoDetail] = useState<memoDto>(defaultMemo);
-    const [dataLoaded, setDataLoaded] = useState(false);
-    const [memoShow, setMemoShow] = useState(false);
-    const [isMemoChanged, setIsMemoChanged] = useState(false);
 
     async function getMemo() {
         try {
             const params = {
-                savedTime: currentMonth.getFullYear() + '-' + (currentMonth.getMonth()+1)
-            };
+                savedTime: currentMonth.getFullYear() + '-' + (currentMonth.getMonth() + 1)
+            }
 
-            const response = await axios.get('http://localhost:8080/api/memo', { params });
+            const response = await axios.get('http://localhost:8080/api/memo', {params});
             setMemo(response.data);
 
         } catch (error) {
             console.error('Error fetching data:', error);
         }
-    };
+    }
 
     async function getDate() {
         try {
@@ -48,9 +46,9 @@ export default function Calendar() {
                 ServiceKey: process.env.REACT_APP_DATA_GO_KR_API_KEY,
                 solYear: currentMonth.getFullYear(),
                 solMonth: ("0" + (currentMonth.getMonth() + 1)).slice(-2)
-            };
+            }
 
-            const response = await axios.get('https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo', { params });
+            const response = await axios.get('https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo', {params});
 
             const holidayData = response.data.response.body.items.item;
 
@@ -67,9 +65,9 @@ export default function Calendar() {
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
-            setDataLoaded(true);
+            setLoadData(true);
         }
-    };
+    }
 
     async function handleSubmitMemo(newMemo: memoDto) {
         try {
@@ -79,9 +77,9 @@ export default function Calendar() {
                     'Content-Type': 'application/json'
                 },
                 body: newMemo
-            });
+            })
 
-            setIsMemoChanged((prev) => !prev);
+            setChangeMemo((prev) => !prev);
 
             const result = await response.data;
             console.log('Post successful:', result);
@@ -99,9 +97,9 @@ export default function Calendar() {
                     'Content-Type': 'application/json'
                 },
                 body: newMemo
-            });
+            })
 
-            setIsMemoChanged((prev) => !prev);
+            setChangeMemo((prev) => !prev);
 
             const result = await response.data;
             console.log('Post successful:', result);
@@ -115,28 +113,28 @@ export default function Calendar() {
         try {
             const params = {
                 id: id
-            };
+            }
 
-            const response = await axios.delete('http://localhost:8080/api/memo', { params });
-            setMemoShow(false);
-            setIsMemoChanged((prev) => !prev);
+            const response = await axios.delete('http://localhost:8080/api/memo', {params});
+            setShowMemo(false);
+            setChangeMemo((prev) => !prev);
 
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
 
-    async function handleClickMemo(id: number) {
+    async function handleDetailMemo(id: number) {
         try {
             const params = {
                 id: id
-            };
+            }
 
-            const response = await axios.get('http://localhost:8080/api/memo/detail', { params });
+            const response = await axios.get('http://localhost:8080/api/memo/detail', {params});
             setMemoDetail(response.data);
 
-            setSavedTime(formatter('savedTimeFormatter',response.data.savedtime));
-            setMemoShow(true);
+            setSavedTime(formatter('savedTimeFormatter', response.data.savedtime));
+            setShowMemo(true);
 
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -144,44 +142,45 @@ export default function Calendar() {
     }
 
     function handleChangeMonth(newMonth: Date) {
+        setShowMemo(false);
         setCurrentMonth(newMonth);
     }
 
     function handleClickDay(id: Date) {
-        navigate('day');
+        setShowMemo(false);
     }
 
-    function handleClickCreateMemo(id: Date) {
+    function handleCreateMemo(id: Date) {
         let savedTime = formatter('savedTimeFormatter', id.toISOString())
         setMemoDetail(defaultMemo);
         setSavedTime(savedTime);
-        setMemoShow(true);
+        setShowMemo(true);
     }
 
     function handleCloseButton() {
-        setMemoShow(false);
+        setShowMemo(false);
     }
 
     useEffect(() => {
-        setDataLoaded(false);
+        setLoadData(false);
         getDate();
     }, [currentMonth]);
 
     useEffect(() => {
         getMemo();
-    }, [isMemoChanged, memoShow]);
+    }, [changeMemo, showMemo]);
 
     return (
-        <div className="calendar">
+        <div className="container">
             <CalendarHeader
                 dataParams={
                     {month: currentMonth}}
                 changedMonth={handleChangeMonth}
             />
-            <div className="h-full flex">
-                <div className="h-full w-full flex flex-col">
+            <div className="calendar-container">
+                <div className="calendar">
                     <CalendarWeek/>
-                    {dataLoaded && (
+                    {loadData && (
                         <CalendarDays
                             dataParams={
                                 {
@@ -190,8 +189,8 @@ export default function Calendar() {
                                     memo: memo
                                 }}
                             handleClickDay={handleClickDay}
-                            handleClickCreateMemo={handleClickCreateMemo}
-                            handleClickMemo={handleClickMemo}
+                            handleCreateMemo={handleCreateMemo}
+                            handleDetailMemo={handleDetailMemo}
                             handleDeleteMemo={handleDeleteMemo}
                         />
                     )}
@@ -199,7 +198,7 @@ export default function Calendar() {
                 <SideMemo
                     dataParams={
                         {
-                            show: memoShow,
+                            show: showMemo,
                             savedTime: savedTime,
                             memoDetail: memoDetail
                         }}
