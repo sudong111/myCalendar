@@ -11,7 +11,7 @@
 
 /*layout*/
 .header {
-  @apply w-full p-4 border border-gray-200 text-center;
+  @apply w-full h-16 p-4 border border-gray-200 text-center;
 }
 
 .footer {
@@ -30,21 +30,25 @@
   @apply block max-w-sm m-4 p-4 bg-white border border-gray-200 rounded-lg shadow;
 }
 
+.header-img {
+  @apply h-20 w-20 p-1.5 object-contain border-b border-gray-200;
+}
+
 /*season*/
 .spring {
-  @apply border-green-50 bg-green-50;
+  background-color: #F5E6E7;
 }
 
 .summer {
-  @apply border-blue-50 bg-blue-50;
+  background-color: #B8D6E8;
 }
 
-.fall {
-  @apply border-orange-50 bg-orange-50;
+.autumn {
+  background-color: #E5D0BB;
 }
 
 .winter {
-  @apply border-stone-50 bg-stone-50;
+  background-color: #F3F4F1;
 }
 
 /*component*/
@@ -137,7 +141,15 @@
 }
 
 .calendar-header {
-  @apply flex justify-between w-full p-4 border-b-2 border-gray-200 text-center;
+  @apply flex h-20 w-full border-b border-gray-200 text-center;
+}
+
+.calendar-header-div {
+  @apply flex w-full justify-between items-center;
+}
+
+.calendar-header-text {
+  @apply pl-2;
 }
 
 .month-change-button {

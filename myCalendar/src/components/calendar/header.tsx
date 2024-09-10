@@ -13,7 +13,8 @@ interface CalendarProps {
 export default function Header({ dataParams, changedMonth }: CalendarProps) {
     const [month, setMonth] = useState(dataParams.month);
     const [season, setSeason] = useState(Season(month.getMonth()+1));
-    console.log(season);
+    const imageUrl = `/myCalendar/images/${season}.png`;
+    const seasonClassName = 'calendar-header-' + season;
 
     function handleClickPrevMonth() {
         const newMonth = subMonths(month, 1);
@@ -32,16 +33,19 @@ export default function Header({ dataParams, changedMonth }: CalendarProps) {
     }, [month]);
 
     return (
-        <div className={season+" calendar-header"}>
-            <div>
-                <span className="month">
-                    {format(month, 'M')}월
-                </span>
-                {format(month, 'yyyy')}
-            </div>
-            <div className="month-change-button">
-                <button onClick={handleClickPrevMonth}><BiChevronLeft /></button>
-                <button onClick={handleClickNextMonth}><BiChevronRight /></button>
+        <div className={season + " calendar-header"}>
+            <img className="header-img" src={imageUrl} alt={season} />
+            <div className={ seasonClassName + " calendar-header-div"}>
+                <div className="calendar-header-text">
+                    <span className="month">
+                        {format(month, 'M')}월
+                    </span>
+                    {format(month, 'yyyy')}
+                </div>
+                <div className="month-change-button">
+                    <button onClick={handleClickPrevMonth}><BiChevronLeft/></button>
+                    <button onClick={handleClickNextMonth}><BiChevronRight/></button>
+                </div>
             </div>
         </div>
     );
