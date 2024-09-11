@@ -2,27 +2,27 @@ import React from 'react';
 import {startOfMonth, startOfWeek, addDays, addWeeks } from 'date-fns';
 import formatter from '../../utils/formatter.util'
 import {holidayDto} from '../../Dto/calendar.dto';
-import {memoDto} from '../../Dto/memo.dto'
+import {scheduleDto} from '../../Dto/schedule.dto'
 import { BiX, BiSolidPlusSquare } from "react-icons/bi";
 
 interface CalendarProps {
     dataParams: {
         month: Date;
-        specialDay: holidayDto[];
-        memo: memoDto[];
+        holidayList: holidayDto[];
+        scheduleList: scheduleDto[];
     };
     handleClickDay: (id: Date) => void;
-    handleCreateMemo: (id: Date) => void;
-    handleDetailMemo: (id: any) => void;
-    handleDeleteMemo: (id: any) => void;
+    handleCreateSchedule: (id: Date) => void;
+    handleDetailSchedule: (id: any) => void;
+    handleDeleteSchedule: (id: any) => void;
 }
 
 
-export default function CalendarDays({ dataParams, handleClickDay, handleCreateMemo, handleDetailMemo, handleDeleteMemo } : CalendarProps) {
+export default function CalendarDays({ dataParams, handleClickDay, handleCreateSchedule, handleDetailSchedule, handleDeleteSchedule } : CalendarProps) {
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    let monthStart = startOfMonth(dataParams.month);
-    let startDate = startOfWeek(monthStart);
-    let holidays = dataParams.specialDay;
+    let startDayOfMonth = startOfMonth(dataParams.month);
+    let startDayOfWeek = startOfWeek(startDayOfMonth);
+    let holidayList = dataParams.holidayList;
     const rows = [];
     let days = [];
     let count = 0;
@@ -33,7 +33,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateM
         const day = value.getDate() < 10 ? '0' + value.getDate().toString() : value.getDate();
         const format = year + month + day;
 
-        for(const holiday of holidays) {
+        for(const holiday of holidayList) {
             if(holiday.locdate.toString() === format) {
                 return holiday.dateName;
             }
@@ -41,21 +41,21 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateM
         return '';
     }
 
-    function handleClickCreateMemo(day : Date) {
-        handleCreateMemo(day);
+    function handleClickCreateSchedule(day : Date) {
+        handleCreateSchedule(day);
     }
 
-    function handleClickDetailMemo(id : number) {
-        handleDetailMemo(id);
+    function handleClickDetailSchedule(id : number) {
+        handleDetailSchedule(id);
     }
 
-    function handleClickDeleteMemo(id : number) {
-       handleDeleteMemo(id);
+    function handleClickDeleteSchedule(id : number) {
+       handleDeleteSchedule(id);
     }
 
     while (count <= 4 ) {
         days = [];
-        let firstDayOfWeek = addWeeks(startDate, count);
+        let firstDayOfWeek = addWeeks(startDayOfWeek, count);
         let savedTime = '';
         for (let i = 0; i < 7 ; i++ ) {
             let day = addDays(firstDayOfWeek, i);
@@ -63,7 +63,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateM
             let divClassName = 'day';
             let isHoliday = findHoliday(day);
 
-            if(day.getMonth() != monthStart.getMonth()) {
+            if(day.getMonth() != startDayOfMonth.getMonth()) {
                 spanClassName += ' text-gray';
                 divClassName = 'day-gray'
             }
@@ -74,8 +74,9 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateM
 
             savedTime = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
 
-            let filteredData = dataParams.memo.filter(item => {
-                const data = formatter('savedTimeFormatter',item.savedtime);
+            //ToDO : 뱃지 만드는거 바꿔야함
+            let filteredData = dataParams.scheduleList.filter(item => {
+                const data = formatter('dayFormatter',item.startDay);
                 return data === savedTime;
             });
 
@@ -90,10 +91,10 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateM
                         </div>
                         {divClassName != 'day-gray' && (
                             <div>
-                                <button className="memo-create-button" onClick={
+                                <button className="schedule-create-button" onClick={
                                     (e) => {
                                         e.stopPropagation();
-                                        handleClickCreateMemo(day);
+                                        handleClickCreateSchedule(day);
                                     }
                                 }>
                                     <BiSolidPlusSquare/></button>
@@ -105,15 +106,15 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateM
                             <span className="badge" key={data.id} onClick={
                                 (e) => {
                                     e.stopPropagation();
-                                    handleClickDetailMemo(data.id);
+                                    handleClickDetailSchedule(data.id);
                                 }
                             }>{data.title}
                                 <div className="flex">
-                                     <p>{formatter('startEndTimeFormatter',data.starttime)} ~ {formatter('startEndTimeFormatter',data.starttime)}</p>
-                                    <button className="memo-delete-button" onClick={
+                                     <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.starttime)}</p>
+                                    <button className="schedule-delete-button" onClick={
                                         (e) => {
                                             e.stopPropagation();
-                                            handleClickDeleteMemo(data.id);
+                                            handleClickDeleteSchedule(data.id);
                                         }
                                     }><BiX/></button>
                                 </div>

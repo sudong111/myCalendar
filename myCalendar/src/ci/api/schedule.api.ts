@@ -3,11 +3,11 @@ import pool from '../server/db'
 
 const router = Router();
 
-router.post('/memo', async (req, res) => {
+router.post('/schedule', async (req, res) => {
     const { title, startday, endday, starttime, endtime, memo } = req.body.body;
     try {
         const result = await pool.query(
-            'INSERT INTO memo (title, startday, endday, starttime, endtime, memo) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            'INSERT INTO schedule (title, startday, endday, starttime, endtime, memo) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
             [title, startday, endday, starttime, endtime, memo]
         );
         res.status(200).json(result.rows[0]);
@@ -18,14 +18,14 @@ router.post('/memo', async (req, res) => {
 });
 
 //Todo 수정필요
-router.get('/memo', async (req, res) => {
-    const { savedTime } = req.query;
+router.get('/schedule', async (req, res) => {
+    const { targetDay } = req.query;
     try {
         const result = await pool.query(
-            `SELECT * FROM memo
+            `SELECT * FROM schedule
              WHERE savedtime >= DATE_TRUNC('month', TO_DATE($1, 'YYYY-MM'))
                AND savedtime < DATE_TRUNC('month', TO_DATE($1, 'YYYY-MM')) + INTERVAL '1 month'`,
-            [savedTime]
+            [targetDay]
         );
         res.status(200).json(result.rows);
     } catch (err) {
@@ -34,11 +34,11 @@ router.get('/memo', async (req, res) => {
     }
 });
 
-router.delete('/memo', async (req, res) => {
+router.delete('/schedule', async (req, res) => {
     const { id } = req.query;
     try {
         const result = await pool.query(
-            `DELETE FROM memo
+            `DELETE FROM schedule
              WHERE id= $1`,
             [id]
         );
@@ -49,11 +49,11 @@ router.delete('/memo', async (req, res) => {
     }
 });
 
-router.put('/memo', async (req, res) => {
+router.put('/schedule', async (req, res) => {
     const { title, startday, endday, starttime, endtime, memo, id } = req.body.body;
     try {
         const result = await pool.query(
-            'UPDATE memo SET title = $1, startday = $2, endday = $3, starttime = $4, endtime = $5,  memo = $6 WHERE id = $7 RETURNING *',
+            'UPDATE schedule SET title = $1, startday = $2, endday = $3, starttime = $4, endtime = $5, memo = $6 WHERE id = $7 RETURNING *',
             [title, startday, endday, starttime, endtime, memo, id]
         );
         res.status(200).json(result.rows[0]);
@@ -63,11 +63,11 @@ router.put('/memo', async (req, res) => {
     }
 });
 
-router.get('/memo/detail', async (req, res) => {
+router.get('/schedule/detail', async (req, res) => {
     const { id } = req.query;
     try {
         const result = await pool.query(
-            `SELECT * FROM memo
+            `SELECT * FROM schedule
              WHERE id= $1`,
             [id]
         );

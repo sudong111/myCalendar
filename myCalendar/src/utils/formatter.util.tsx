@@ -1,7 +1,7 @@
 type Formatters = {
     twoDigitsFormatter: (value: string) => string;
-    startEndTimeFormatter: (value: string) => string;
-    savedTimeFormatter: (value: string) => string;
+    timeFormatter: (value: string) => string;
+    dayFormatter: (value: string) => string;
 };
 
 export default function Formatter(functionName: keyof Formatters, target: string) {
@@ -16,11 +16,11 @@ export default function Formatter(functionName: keyof Formatters, target: string
             }
         },
 
-        startEndTimeFormatter: (value: string): string => {
+        timeFormatter: (value: string): string => {
             return value.substring(0, 5);
         },
 
-        savedTimeFormatter: (value: string): string => {
+        dayFormatter: (value: string): string => {
             const date = new Date(value);
             return date.getFullYear() + '-' +
                 Formatter('twoDigitsFormatter',(date.getMonth()+1).toString()) + '-' +

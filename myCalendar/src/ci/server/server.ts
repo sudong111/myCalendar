@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import apiRoutes from '../api/memo-api';
+import apiRoutes from '../api/schedule.api';
 
 const app = express();
 const port = process.env.PORT || 8080;

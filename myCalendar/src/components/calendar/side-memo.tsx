@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {memoDto} from '../../Dto/memo.dto';
+import {memoDto} from '../../Dto/schedule.dto';
 import { BiX, BiPlus, BiTime, BiPencil, BiTrash } from "react-icons/bi";
 
 interface SideMemoProps {

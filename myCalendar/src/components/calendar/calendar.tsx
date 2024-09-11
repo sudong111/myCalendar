@@ -6,34 +6,36 @@ import CalendarDays from './days';
 import SideMemo from './side-memo';
 import formatter from '../../utils/formatter.util'
 import {holidayDto} from '../../Dto/calendar.dto';
-import {memoDto} from '../../Dto/memo.dto'
+import {scheduleDto} from '../../Dto/schedule.dto'
 
 export default function Calendar() {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [holiday, setHoliday] = useState<holidayDto[]>([]);
-    const [memo, setMemo] = useState<memoDto[]>([]);
-    const [savedTime, setSavedTime] = useState('');
+    const [scheduleList, setScheduleList] = useState<scheduleDto[]>([]);
+    const [startDay, setStartDay] = useState('');
+    const [endDay, setEndDay] = useState('');
     const [loadData, setLoadData] = useState(false);
-    const [showMemo, setShowMemo] = useState(false);
-    const [changeMemo, setChangeMemo] = useState(false);
-    const defaultMemo = {
+    const [showSideSchedule, setShowSideSchedule] = useState(false);
+    const [changeSchedule, setChangeSchedule] = useState(false);
+    const defaultSchedule = {
         id: 0,
         title: '',
-        savedtime: savedTime,
+        startDay: startDay,
+        endDay: endDay,
         starttime: '00:00',
         endtime: '00:00',
         memo: ''
     }
-    const [memoDetail, setMemoDetail] = useState<memoDto>(defaultMemo);
+    const [schedule, setSchedule] = useState<scheduleDto>(defaultSchedule);
 
-    async function getMemo() {
+    async function getScheduleList() {
         try {
             const params = {
-                savedTime: currentMonth.getFullYear() + '-' + (currentMonth.getMonth() + 1)
+                targetDay: currentMonth.getFullYear() + '-' + (currentMonth.getMonth() + 1)
             }
 
-            const response = await axios.get('http://localhost:8080/api/memo', {params});
-            setMemo(response.data);
+            const response = await axios.get('http://localhost:8080/api/schedule', {params});
+            setScheduleList(response.data);
 
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -69,17 +71,17 @@ export default function Calendar() {
         }
     }
 
-    async function handleSubmitMemo(newMemo: memoDto) {
+    async function handleSubmitSchedule(schedule: scheduleDto) {
         try {
-            const response = await axios.post('http://localhost:8080/api/memo', {
+            const response = await axios.post('http://localhost:8080/api/schedule', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: newMemo
+                body: schedule
             })
 
-            setChangeMemo((prev) => !prev);
+            setChangeSchedule((prev) => !prev);
 
             const result = await response.data;
             console.log('Post successful:', result);
@@ -89,17 +91,17 @@ export default function Calendar() {
         }
     }
 
-    async function handleModifyMemo(newMemo: memoDto) {
+    async function handleChangeSchedule(schedule: scheduleDto) {
         try {
-            const response = await axios.put('http://localhost:8080/api/memo', {
+            const response = await axios.put('http://localhost:8080/api/schedule', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: newMemo
+                body: schedule
             })
 
-            setChangeMemo((prev) => !prev);
+            setChangeSchedule((prev) => !prev);
 
             const result = await response.data;
             console.log('Post successful:', result);
@@ -109,32 +111,33 @@ export default function Calendar() {
         }
     }
 
-    async function handleDeleteMemo(id: number) {
+    async function handleDeleteSchedule(id: number) {
         try {
             const params = {
                 id: id
             }
 
-            const response = await axios.delete('http://localhost:8080/api/memo', {params});
-            setShowMemo(false);
-            setChangeMemo((prev) => !prev);
+            const response = await axios.delete('http://localhost:8080/api/schedule', {params});
+            setShowSideSchedule(false);
+            setChangeSchedule((prev) => !prev);
 
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     }
 
-    async function handleDetailMemo(id: number) {
+    // TODO 스케줄 선택할때 아이디 넘겨줘야함
+    async function handleDetailSchedule(id: number) {
         try {
             const params = {
                 id: id
             }
 
-            const response = await axios.get('http://localhost:8080/api/memo/detail', {params});
-            setMemoDetail(response.data);
+            const response = await axios.get('http://localhost:8080/api/schedule/detail', {params});
+            setSchedule(response.data);
 
-            setSavedTime(formatter('savedTimeFormatter', response.data.savedtime));
-            setShowMemo(true);
+            setStartDay(formatter('dayFormatter', response.data.savedtime));
+            setShowSideSchedule(true);
 
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -142,23 +145,23 @@ export default function Calendar() {
     }
 
     function handleChangeMonth(newMonth: Date) {
-        setShowMemo(false);
+        setShowSideSchedule(false);
         setCurrentMonth(newMonth);
     }
 
     function handleClickDay(id: Date) {
-        setShowMemo(false);
+        setShowSideSchedule(false);
     }
 
-    function handleCreateMemo(id: Date) {
-        let savedTime = formatter('savedTimeFormatter', id.toISOString())
-        setMemoDetail(defaultMemo);
-        setSavedTime(savedTime);
-        setShowMemo(true);
+    function handleCreateSchedule(id: Date) {
+        let startDay = formatter('timeFormatter', id.toISOString())
+        setSchedule(defaultSchedule);
+        setStartDay(startDay);
+        setShowSideSchedule(true);
     }
 
     function handleCloseButton() {
-        setShowMemo(false);
+        setShowSideSchedule(false);
     }
 
     useEffect(() => {
@@ -167,8 +170,8 @@ export default function Calendar() {
     }, [currentMonth]);
 
     useEffect(() => {
-        getMemo();
-    }, [changeMemo, showMemo]);
+        getScheduleList();
+    }, [changeSchedule, showSideSchedule]);
 
     return (
         <div className="container">
@@ -185,27 +188,27 @@ export default function Calendar() {
                             dataParams={
                                 {
                                     month: currentMonth,
-                                    specialDay: holiday,
-                                    memo: memo
+                                    holidayList: holiday,
+                                    scheduleList: scheduleList
                                 }}
                             handleClickDay={handleClickDay}
-                            handleCreateMemo={handleCreateMemo}
-                            handleDetailMemo={handleDetailMemo}
-                            handleDeleteMemo={handleDeleteMemo}
+                            handleCreateSchedule={handleCreateSchedule}
+                            handleDetailSchedule={handleDetailSchedule}
+                            handleDeleteSchedule={handleDeleteSchedule}
                         />
                     )}
                 </div>
                 <SideMemo
                     dataParams={
                         {
-                            show: showMemo,
-                            savedTime: savedTime,
-                            memoDetail: memoDetail
+                            show: showSideSchedule,
+                            savedTime: startDay,
+                            memoDetail: schedule
                         }}
                     handleCloseButton={handleCloseButton}
-                    handleSubmitMemo={handleSubmitMemo}
-                    handleModifyMemo={handleModifyMemo}
-                    handleDeleteMemo={handleDeleteMemo}/>
+                    handleSubmitMemo={handleSubmitSchedule}
+                    handleModifyMemo={handleChangeSchedule}
+                    handleDeleteMemo={handleDeleteSchedule}/>
             </div>
         </div>
     )
