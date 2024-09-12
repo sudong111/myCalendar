@@ -3,7 +3,7 @@ import axios from 'axios';
 import CalendarHeader from './header';
 import CalendarWeek from './week';
 import CalendarDays from './days';
-import SideMemo from './side-memo';
+import SideSchedule from './side-schedule';
 import formatter from '../../utils/formatter.util'
 import {holidayDto} from '../../Dto/calendar.dto';
 import {scheduleDto} from '../../Dto/schedule.dto'
@@ -198,7 +198,7 @@ export default function Calendar() {
                         />
                     )}
                 </div>
-                <SideMemo
+                <SideSchedule
                     dataParams={
                         {
                             show: showSideSchedule,
@@ -206,9 +206,9 @@ export default function Calendar() {
                             memoDetail: schedule
                         }}
                     handleCloseButton={handleCloseButton}
-                    handleSubmitMemo={handleSubmitSchedule}
-                    handleModifyMemo={handleChangeSchedule}
-                    handleDeleteMemo={handleDeleteSchedule}/>
+                    handleSubmitSchedule={handleSubmitSchedule}
+                    handleModifySchedule={handleChangeSchedule}
+                    handleDeleteSchedule={handleDeleteSchedule}/>
             </div>
         </div>
     )
