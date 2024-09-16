@@ -25,6 +25,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
     let holidayList = dataParams.holidayList;
     const rows = [];
     let days = [];
+    let scheduleList = [];
     let count = 0;
 
     function findHoliday(value: Date) {
@@ -56,7 +57,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
     while (count <= 4 ) {
         days = [];
         let firstDayOfWeek = addWeeks(startDayOfWeek, count);
-        let savedTime = '';
+        let startDay = '';
         for (let i = 0; i < 7 ; i++ ) {
             let day = addDays(firstDayOfWeek, i);
             let spanClassName = 'text';
@@ -72,60 +73,89 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
                 spanClassName += ' text-red';
             }
 
-            savedTime = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
+            startDay = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
 
-            //ToDO : 뱃지 만드는거 바꿔야함
             let filteredData = dataParams.scheduleList.filter(item => {
-                const data = formatter('dayFormatter',item.startDay);
-                return data === savedTime;
+                const startDate = new Date(item.startday);
+                const endDate = new Date(item.endday);
+
+                const currentDay = new Date(day);
+                currentDay.setHours(0, 0, 0, 0);
+
+                return currentDay >= startDate && currentDay <= endDate;
             });
 
             days.push(
-                <div className={divClassName} id={savedTime} key={savedTime} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
-                    <div className="day-header">
-                        <div>
-                        <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
-                        {isHoliday && (
-                            <span className={spanClassName}>{isHoliday}</span>
-                        )}
-                        </div>
-                        {divClassName != 'day-gray' && (
-                            <div>
-                                <button className="schedule-create-button" onClick={
-                                    (e) => {
-                                        e.stopPropagation();
-                                        handleClickCreateSchedule(day);
-                                    }
-                                }>
-                                    <BiSolidPlusSquare/></button>
-                            </div>
-                        )}
-                    </div>
-                    <div>
-                        {filteredData.length > 0 && filteredData.map((data) => (
-                            <span className="badge" key={data.id} onClick={
-                                (e) => {
-                                    e.stopPropagation();
-                                    handleClickDetailSchedule(data.id);
-                                }
-                            }>{data.title}
-                                <div className="flex">
-                                     <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.starttime)}</p>
-                                    <button className="schedule-delete-button" onClick={
-                                        (e) => {
-                                            e.stopPropagation();
-                                            handleClickDeleteSchedule(data.id);
-                                        }
-                                    }><BiX/></button>
-                                </div>
-                            </span>
-                        ))}
-                    </div>
-                </div>
+                <td className='grid-td'>
+
+                </td>
+
+                // <table className={divClassName} id={startDay} key={startDay} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
+                //     <div className="day-header">
+                //         <div>
+                //         <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
+                //         {isHoliday && (
+                //             <span className={spanClassName}>{isHoliday}</span>
+                //         )}
+                //         </div>
+                //         {divClassName != 'day-gray' && (
+                //             <div>
+                //                 <button className="schedule-create-button" onClick={
+                //                     (e) => {
+                //                         e.stopPropagation()
+                //                         handleClickCreateSchedule(day);
+                //                     }
+                //                 }>
+                //                     <BiSolidPlusSquare/></button>
+                //             </div>
+                //         )}
+                //     </div>
+                //     <div>
+                //         {filteredData.length > 0 && filteredData.map((data) => (
+                //             <span className="badge" key={data.id} onClick={
+                //                 (e) => {
+                //                     e.stopPropagation();
+                //                     handleClickDetailSchedule(data.id);
+                //                 }
+                //             }>{data.title}
+                //                 <div className="flex">
+                //                      <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.endtime)}</p>
+                //                     {/*<button className="schedule-delete-button" onClick={*/}
+                //                     {/*    (e) => {*/}
+                //                     {/*        e.stopPropagation();*/}
+                //                     {/*        handleClickDeleteSchedule(data.id);*/}
+                //                     {/*    }*/}
+                //                     {/*}><BiX/></button>*/}
+                //                 </div>
+                //             </span>
+                //         ))}
+                //     </div>
+                // </table>
             )
+
+            // scheduleList.push(
+            //
+            // )
         }
+        if(count > 0)
+        scheduleList.push(
+            <tr>{startDay}</tr>
+        )
         rows.push(
-            <div className='weeks' key={`week-${count}`}>{days}</div>
+            <div className='weeks' key={`week-${count}`}>
+                <table className='table-grid'>
+                    <tbody>
+                    <tr>
+                    {days}
+                    </tr>
+                    </tbody>
+                </table>
+                <table className='table-schedule'>
+                    <tbody>
+                    {scheduleList}
+                    </tbody>
+                </table>
+                </div>
         );
         count++;
     }

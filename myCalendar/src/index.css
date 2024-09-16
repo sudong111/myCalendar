@@ -68,7 +68,17 @@
 
 /*component*/
 .input {
-  @apply border-gray-200 text-gray-900 text-sm rounded-lg border focus:ring-blue-200 focus:border-blue-200 block w-full ml-2;
+  @apply border-gray-200 text-gray-900 text-sm rounded-lg border focus:ring-blue-200 focus:border-blue-200 block ml-2;
+  width: 100%
+}
+
+.input-div {
+  width:80%;
+}
+
+.input-text {
+  @apply text-nowrap;
+  width: 20%;
 }
 
 .timer {
@@ -100,7 +110,7 @@
   @apply text-xs pl-1;
 }
 
-/*side-memo*/
+/*side-schedule*/
 .side-off {
   @apply fixed right-0 invisible translate-x-full ease-in-out duration-300;
 }
@@ -118,8 +128,8 @@
   @apply flex items-baseline;
 }
 
-.side-memo-title {
-  @apply flex w-full h-12 p-3;
+.side-schedule-title {
+  @apply flex w-full h-12 p-3 items-center;
 }
 
 .side-select-time {
@@ -146,7 +156,7 @@
   @apply flex text-2xl;
 }
 
-.memo-delete-button {
+.schedule-delete-button {
   @apply pl-1;
 }
 
@@ -171,16 +181,28 @@
   @apply flex border-b;
 }
 
-.dayOfWeek {
-  @apply flex flex-col flex-1 border-r text-gray-500 justify-between;
-}
-
 .weeks {
-  @apply flex h-full border-b overflow-hidden;
+  @apply flex h-full overflow-hidden relative;
 }
 
 .days {
-  @apply h-full flex flex-col;
+  @apply h-full flex flex-col relative;
+}
+
+.table-week {
+  @apply w-full table-fixed border-b border-collapse;
+}
+
+.table-grid {
+  @apply w-full h-full absolute top-0 left-0 table-fixed border-b border-collapse;
+}
+
+.grid-td {
+  @apply border-r border-collapse;
+}
+
+.table-schedule {
+  @apply w-full relative table-fixed;
 }
 
 .day {
@@ -191,7 +213,7 @@
   @apply flex justify-between;
 }
 
-.memo-create-button {
+.schedule-create-button {
   @apply pl-1 text-2xl text-blue-500 hover:text-blue-600;
 }
 

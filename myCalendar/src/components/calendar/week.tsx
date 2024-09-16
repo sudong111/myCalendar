@@ -6,13 +6,15 @@ export default function CalendarWeek() {
 
     for (const day of date) {
         days.push(
-            <div className='dayOfWeek' id={day} key={day}>
+            <td className='grid-td' id={day} key={day}>
                 <span>{day}</span>
-            </div>
+            </td>
         );
     }
     
     return (
-        <div className="week">{days}</div>
+        <table className="table-week">
+            <tbody><tr>{days}</tr></tbody>
+        </table>
     );
 }

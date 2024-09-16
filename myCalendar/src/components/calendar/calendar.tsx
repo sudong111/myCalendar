@@ -20,8 +20,8 @@ export default function Calendar() {
     const defaultSchedule = {
         id: 0,
         title: '',
-        startDay: startDay,
-        endDay: endDay,
+        startday: startDay,
+        endday: endDay,
         starttime: '00:00',
         endtime: '00:00',
         memo: ''
@@ -154,7 +154,7 @@ export default function Calendar() {
     }
 
     function handleCreateSchedule(id: Date) {
-        let startDay = formatter('timeFormatter', id.toISOString())
+        let startDay = formatter('dayFormatter', id.toISOString())
         setSchedule(defaultSchedule);
         setStartDay(startDay);
         setShowSideSchedule(true);
@@ -202,8 +202,8 @@ export default function Calendar() {
                     dataParams={
                         {
                             show: showSideSchedule,
-                            savedTime: startDay,
-                            memoDetail: schedule
+                            selectDay: startDay,
+                            scheduleInfo: schedule
                         }}
                     handleCloseButton={handleCloseButton}
                     handleSubmitSchedule={handleSubmitSchedule}

@@ -17,15 +17,17 @@ router.post('/schedule', async (req, res) => {
     }
 });
 
-//Todo 수정필요
 router.get('/schedule', async (req, res) => {
     const { targetDay } = req.query;
     try {
         const result = await pool.query(
             `SELECT * FROM schedule
-             WHERE savedtime >= DATE_TRUNC('month', TO_DATE($1, 'YYYY-MM'))
-               AND savedtime < DATE_TRUNC('month', TO_DATE($1, 'YYYY-MM')) + INTERVAL '1 month'`,
-            [targetDay]
+             WHERE startday <= $1::date + INTERVAL '1 month' - INTERVAL '1 day'
+               AND endday >= $2::date`,
+            [
+                `${targetDay}-01`, // The first day of the month
+                `${targetDay}-01`  // The first day of the month
+            ]
         );
         res.status(200).json(result.rows);
     } catch (err) {
