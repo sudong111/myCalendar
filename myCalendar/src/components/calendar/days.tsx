@@ -1,5 +1,5 @@
 import React from 'react';
-import {startOfMonth, startOfWeek, addDays, addWeeks } from 'date-fns';
+import {startOfMonth, startOfWeek, addDays, addWeeks, endOfWeek} from 'date-fns';
 import formatter from '../../utils/formatter.util'
 import {holidayDto} from '../../Dto/calendar.dto';
 import {scheduleDto} from '../../Dto/schedule.dto'
@@ -21,11 +21,11 @@ interface CalendarProps {
 export default function CalendarDays({ dataParams, handleClickDay, handleCreateSchedule, handleDetailSchedule, handleDeleteSchedule } : CalendarProps) {
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let startDayOfMonth = startOfMonth(dataParams.month);
-    let startDayOfWeek = startOfWeek(startDayOfMonth);
     let holidayList = dataParams.holidayList;
     const rows = [];
     let days = [];
     let scheduleList = [];
+    let dateList = [];
     let count = 0;
 
     function findHoliday(value: Date) {
@@ -42,6 +42,15 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
         return '';
     }
 
+    function getFilteredSchedulesForWeek(schedules: scheduleDto[], weekStart: Date, weekEnd: Date) {
+        return schedules.filter(item => {
+            const startday = new Date(item.startday);
+            const endday = new Date(item.endday);
+
+            return (startday <= weekEnd && endday >= weekStart);
+        });
+    }
+
     function handleClickCreateSchedule(day : Date) {
         handleCreateSchedule(day);
     }
@@ -56,8 +65,17 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
 
     while (count <= 4 ) {
         days = [];
-        let firstDayOfWeek = addWeeks(startDayOfWeek, count);
+        dateList = [];
+        scheduleList = [];
+        let trList = [];
+        let tdList = [];
+        let firstDayOfWeek = addWeeks(startOfWeek(startDayOfMonth), count);
+        let endDayOfWeek = addWeeks(endOfWeek(startDayOfMonth), count);
         let startDay = '';
+
+        const filteredData = getFilteredSchedulesForWeek(dataParams.scheduleList, firstDayOfWeek, endDayOfWeek);
+
+        //days
         for (let i = 0; i < 7 ; i++ ) {
             let day = addDays(firstDayOfWeek, i);
             let spanClassName = 'text';
@@ -75,72 +93,53 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
 
             startDay = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
 
-            let filteredData = dataParams.scheduleList.filter(item => {
-                const startDate = new Date(item.startday);
-                const endDate = new Date(item.endday);
-
-                const currentDay = new Date(day);
-                currentDay.setHours(0, 0, 0, 0);
-
-                return currentDay >= startDate && currentDay <= endDate;
-            });
-
             days.push(
-                <td className='grid-td'>
-
-                </td>
-
-                // <table className={divClassName} id={startDay} key={startDay} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
-                //     <div className="day-header">
-                //         <div>
-                //         <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
-                //         {isHoliday && (
-                //             <span className={spanClassName}>{isHoliday}</span>
-                //         )}
-                //         </div>
-                //         {divClassName != 'day-gray' && (
-                //             <div>
-                //                 <button className="schedule-create-button" onClick={
-                //                     (e) => {
-                //                         e.stopPropagation()
-                //                         handleClickCreateSchedule(day);
-                //                     }
-                //                 }>
-                //                     <BiSolidPlusSquare/></button>
-                //             </div>
-                //         )}
-                //     </div>
-                //     <div>
-                //         {filteredData.length > 0 && filteredData.map((data) => (
-                //             <span className="badge" key={data.id} onClick={
-                //                 (e) => {
-                //                     e.stopPropagation();
-                //                     handleClickDetailSchedule(data.id);
-                //                 }
-                //             }>{data.title}
-                //                 <div className="flex">
-                //                      <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.endtime)}</p>
-                //                     {/*<button className="schedule-delete-button" onClick={*/}
-                //                     {/*    (e) => {*/}
-                //                     {/*        e.stopPropagation();*/}
-                //                     {/*        handleClickDeleteSchedule(data.id);*/}
-                //                     {/*    }*/}
-                //                     {/*}><BiX/></button>*/}
-                //                 </div>
-                //             </span>
-                //         ))}
-                //     </div>
-                // </table>
+                <td className={'grid-td ' + divClassName} key={startDay} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}></td>
             )
 
-            // scheduleList.push(
-            //
-            // )
+            dateList.push(
+                <td>
+                    <div className='day-header'>
+                        <div>
+                            <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
+                            {isHoliday && (
+                                <span className={spanClassName}>{isHoliday}</span>
+                            )}
+                        </div>
+
+                        {divClassName != 'day-gray' && (
+                            <div>
+                                <button className="schedule-create-button" onClick={
+                                    (e) => {
+                                        e.stopPropagation()
+                                        handleClickCreateSchedule(day);
+                                    }
+                                }>
+                                    <BiSolidPlusSquare/></button>
+                            </div>
+                        )}
+                    </div>
+                </td>
+            )
         }
-        if(count > 0)
+        //week
+        filteredData.forEach((item, index) => {
+            for(let i = 0 ; i < 7 ; i++) {
+                tdList.push(
+                    <td>&nbsp;</td>
+                )
+            }
+            trList.push(
+                <tr>
+                    {tdList}
+                </tr>
+            );
+        });
+
         scheduleList.push(
-            <tr>{startDay}</tr>
+            {trList}
         )
+
         rows.push(
             <div className='weeks' key={`week-${count}`}>
                 <table className='table-grid'>
@@ -152,6 +151,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
                 </table>
                 <table className='table-schedule'>
                     <tbody>
+                    <tr>{dateList}</tr>
                     {scheduleList}
                     </tbody>
                 </table>

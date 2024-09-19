@@ -19,20 +19,31 @@ router.post('/schedule', async (req, res) => {
 
 router.get('/schedule', async (req, res) => {
     const { targetDay } = req.query;
+
+    if (typeof targetDay !== 'string') {
+        return res.status(400).json({ error: 'Invalid targetDay' });
+    }
+
     try {
+        const [year, month] = targetDay.split('-').map(Number);
+        const targetMonthStart = `${year}-${month.toString().padStart(2, '0')}-01`;
+        const targetMonthEnd = new Date(year, month, 0);
+        const formattedTargetMonthEnd = targetMonthEnd.toISOString().split('T')[0];
+
         const result = await pool.query(
             `SELECT * FROM schedule
-             WHERE startday <= $1::date + INTERVAL '1 month' - INTERVAL '1 day'
+             WHERE startday <= $1::date
                AND endday >= $2::date`,
             [
-                `${targetDay}-01`, // The first day of the month
-                `${targetDay}-01`  // The first day of the month
+                formattedTargetMonthEnd,
+                targetMonthStart
             ]
         );
+
         res.status(200).json(result.rows);
     } catch (err) {
-        console.error('Error executing query', err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error('쿼리 실행 중 오류 발생', err);
+        res.status(500).json({ error: '서버 내부 오류' });
     }
 });
 

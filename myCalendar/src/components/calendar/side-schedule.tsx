@@ -108,3 +108,32 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
         </div>
     )
 }
+
+// <table className={divClassName} id={startDay} key={startDay} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
+//     <div className="day-header">
+//         <div>
+
+//         </div>
+
+//     </div>
+//     <div>
+//         {filteredData.length > 0 && filteredData.map((data) => (
+//             <span className="badge" key={data.id} onClick={
+//                 (e) => {
+//                     e.stopPropagation();
+//                     handleClickDetailSchedule(data.id);
+//                 }
+//             }>{data.title}
+//                 <div className="flex">
+//                      <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.endtime)}</p>
+//                     {/*<button className="schedule-delete-button" onClick={*/}
+//                     {/*    (e) => {*/}
+//                     {/*        e.stopPropagation();*/}
+//                     {/*        handleClickDeleteSchedule(data.id);*/}
+//                     {/*    }*/}
+//                     {/*}><BiX/></button>*/}
+//                 </div>
+//             </span>
+//         ))}
+//     </div>
+// </table>

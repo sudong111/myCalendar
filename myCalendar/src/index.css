@@ -206,11 +206,11 @@
 }
 
 .day {
-  @apply flex flex-col flex-1 border-r text-gray-500 hover:bg-gray-50 cursor-pointer justify-between;
+  @apply hover:bg-gray-50 cursor-pointer;
 }
 
 .day-header {
-  @apply flex justify-between;
+  @apply flex justify-between h-6;
 }
 
 .schedule-create-button {
@@ -218,7 +218,7 @@
 }
 
 .day-gray {
-  @apply flex flex-1 border-r bg-gray-100 text-gray-500 justify-between;
+  @apply bg-gray-100 text-gray-500;
 }
 
 #Sun {
