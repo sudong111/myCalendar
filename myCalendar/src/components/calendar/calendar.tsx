@@ -13,15 +13,13 @@ export default function Calendar() {
     const [holiday, setHoliday] = useState<holidayDto[]>([]);
     const [scheduleList, setScheduleList] = useState<scheduleDto[]>([]);
     const [startDay, setStartDay] = useState('');
-    const [endDay, setEndDay] = useState('');
     const [loadData, setLoadData] = useState(false);
     const [showSideSchedule, setShowSideSchedule] = useState(false);
     const [changeSchedule, setChangeSchedule] = useState(false);
     const defaultSchedule = {
         id: 0,
         title: '',
-        startDay: startDay,
-        endDay: endDay,
+        startday: startDay,
         starttime: '00:00',
         endtime: '00:00',
         memo: ''
@@ -126,7 +124,6 @@ export default function Calendar() {
         }
     }
 
-    // TODO 스케줄 선택할때 아이디 넘겨줘야함
     async function handleDetailSchedule(id: number) {
         try {
             const params = {
@@ -136,7 +133,7 @@ export default function Calendar() {
             const response = await axios.get('http://localhost:8080/api/schedule/detail', {params});
             setSchedule(response.data);
 
-            setStartDay(formatter('dayFormatter', response.data.savedtime));
+            setStartDay(formatter('dayFormatter', response.data.startday));
             setShowSideSchedule(true);
 
         } catch (error) {
@@ -154,7 +151,7 @@ export default function Calendar() {
     }
 
     function handleCreateSchedule(id: Date) {
-        let startDay = formatter('timeFormatter', id.toISOString())
+        let startDay = formatter('dayFormatter', id.toString())
         setSchedule(defaultSchedule);
         setStartDay(startDay);
         setShowSideSchedule(true);
@@ -202,7 +199,7 @@ export default function Calendar() {
                     dataParams={
                         {
                             show: showSideSchedule,
-                            savedTime: startDay,
+                            startday: startDay,
                             memoDetail: schedule
                         }}
                     handleCloseButton={handleCloseButton}

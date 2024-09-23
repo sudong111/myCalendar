@@ -74,9 +74,8 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
 
             savedTime = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
 
-            //ToDO : 뱃지 만드는거 바꿔야함
             let filteredData = dataParams.scheduleList.filter(item => {
-                const data = formatter('dayFormatter',item.startDay);
+                const data = formatter('dayFormatter',item.startday);
                 return data === savedTime;
             });
 
@@ -110,7 +109,7 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
                                 }
                             }>{data.title}
                                 <div className="flex">
-                                     <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.starttime)}</p>
+                                     <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.endtime)}</p>
                                     <button className="schedule-delete-button" onClick={
                                         (e) => {
                                             e.stopPropagation();

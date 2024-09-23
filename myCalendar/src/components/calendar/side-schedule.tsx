@@ -5,7 +5,7 @@ import { BiX, BiPlus, BiTime, BiPencil, BiTrash } from "react-icons/bi";
 interface SideScheduleProps {
     dataParams: {
         show: boolean;
-        savedTime: string;
+        startday: string;
         memoDetail: scheduleDto;
     }
     handleCloseButton: () => void;
@@ -22,7 +22,7 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
         setSchedule(prevSchedule => ({
             ...prevSchedule,
             [name]: value,
-            savedtime: dataParams.savedTime
+            startday: dataParams.startday
         }));
     }
 
@@ -49,7 +49,7 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
                     <p className="title">
                         메모 {schedule.id === 0 ? '생성' : '수정'}
                     </p>
-                    <p className="desc">({dataParams.savedTime})</p>
+                    <p className="desc">({dataParams.startday})</p>
                 </div>
                 <button className="side-close-button" onClick={handleCloseButton}><BiX/></button>
             </div>

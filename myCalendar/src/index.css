@@ -191,7 +191,7 @@
   @apply flex justify-between;
 }
 
-.memo-create-button {
+.schedule-create-button {
   @apply pl-1 text-2xl text-blue-500 hover:text-blue-600;
 }
 
