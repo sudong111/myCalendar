@@ -6,7 +6,7 @@ interface SideScheduleProps {
     dataParams: {
         show: boolean;
         startday: string;
-        memoDetail: scheduleDto;
+        scheduleData: scheduleDto;
     }
     handleCloseButton: () => void;
     handleSubmitSchedule: (schedule: scheduleDto) => void;
@@ -15,7 +15,7 @@ interface SideScheduleProps {
 }
 
 export default function SideSchedule({ dataParams, handleCloseButton, handleSubmitSchedule, handleModifySchedule, handleDeleteSchedule } : SideScheduleProps) {
-    const [schedule, setSchedule] = useState<scheduleDto>(dataParams.memoDetail);
+    const [schedule, setSchedule] = useState<scheduleDto>(dataParams.scheduleData);
 
     function handleChangedValues(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const { name, value } = e.target;
@@ -39,15 +39,15 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
     }
 
     useEffect(() => {
-        setSchedule(dataParams.memoDetail);
-    }, [dataParams.memoDetail]);
+        setSchedule(dataParams.scheduleData);
+    }, [dataParams.scheduleData]);
     
     return (
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">
                 <div className="side-title">
                     <p className="title">
-                        메모 {schedule.id === 0 ? '생성' : '수정'}
+                        일정 {schedule.id === 0 ? '생성' : '수정'}
                     </p>
                     <p className="desc">({dataParams.startday})</p>
                 </div>
@@ -55,7 +55,8 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
             </div>
             <div className="side-memo-title">
                 <p>title</p>
-                <input type="text" name="title" value={schedule.title} onChange={handleChangedValues} className="input" placeholder="제목을 입력하세요." required />
+                <input type="text" name="title" value={schedule.title} onChange={handleChangedValues} className="input"
+                       placeholder="제목을 입력하세요." required/>
             </div>
             <div className="side-select-time">
                 <p>time</p>
@@ -82,15 +83,15 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
             <div className="side-confirm">
                 {schedule.id === 0 ? (
                     <button className="side-confirm-button" onClick={handleSubmitButton}>
-                        <BiPlus />
+                        <BiPlus/>
                     </button>
                 ) : (
                     <>
                         <button className="side-confirm-button" onClick={handleModifyButton}>
-                            <BiPencil />
+                            <BiPencil/>
                         </button>
                         <button className="side-delete-button" onClick={handleDeleteButton}>
-                            <BiTrash />
+                            <BiTrash/>
                         </button>
                     </>
                 )}

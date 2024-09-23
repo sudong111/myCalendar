@@ -200,7 +200,7 @@ export default function Calendar() {
                         {
                             show: showSideSchedule,
                             startday: startDay,
-                            memoDetail: schedule
+                            scheduleData: schedule
                         }}
                     handleCloseButton={handleCloseButton}
                     handleSubmitSchedule={handleSubmitSchedule}

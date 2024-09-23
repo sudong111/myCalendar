@@ -68,17 +68,7 @@
 
 /*component*/
 .input {
-  @apply border-gray-200 text-gray-900 text-sm rounded-lg border focus:ring-blue-200 focus:border-blue-200 block ml-2;
-  width: 100%
-}
-
-.input-div {
-  width:80%;
-}
-
-.input-text {
-  @apply text-nowrap;
-  width: 20%;
+  @apply border-gray-200 text-gray-900 text-sm rounded-lg border focus:ring-blue-200 focus:border-blue-200 block w-full ml-2;
 }
 
 .timer {
@@ -110,7 +100,7 @@
   @apply text-xs pl-1;
 }
 
-/*side-schedule*/
+/*side-memo*/
 .side-off {
   @apply fixed right-0 invisible translate-x-full ease-in-out duration-300;
 }
@@ -128,8 +118,8 @@
   @apply flex items-baseline;
 }
 
-.side-schedule-title {
-  @apply flex w-full h-12 p-3 items-center;
+.side-memo-title {
+  @apply flex w-full h-12 p-3;
 }
 
 .side-select-time {
@@ -156,7 +146,7 @@
   @apply flex text-2xl;
 }
 
-.schedule-delete-button {
+.memo-delete-button {
   @apply pl-1;
 }
 
@@ -181,36 +171,24 @@
   @apply flex border-b;
 }
 
+.dayOfWeek {
+  @apply flex flex-col flex-1 border-r text-gray-500 justify-between;
+}
+
 .weeks {
-  @apply flex h-full overflow-hidden relative;
+  @apply flex h-full border-b overflow-hidden;
 }
 
 .days {
-  @apply h-full flex flex-col relative;
-}
-
-.table-week {
-  @apply w-full table-fixed border-b border-collapse;
-}
-
-.table-grid {
-  @apply w-full h-full absolute top-0 left-0 table-fixed border-b border-collapse;
-}
-
-.grid-td {
-  @apply border-r border-collapse;
-}
-
-.table-schedule {
-  @apply w-full relative table-fixed;
+  @apply h-full flex flex-col;
 }
 
 .day {
-  @apply hover:bg-gray-50 cursor-pointer;
+  @apply flex flex-col flex-1 border-r text-gray-500 hover:bg-gray-50 cursor-pointer justify-between;
 }
 
 .day-header {
-  @apply flex justify-between h-6;
+  @apply flex justify-between;
 }
 
 .schedule-create-button {
@@ -218,7 +196,7 @@
 }
 
 .day-gray {
-  @apply bg-gray-100 text-gray-500;
+  @apply flex flex-1 border-r bg-gray-100 text-gray-500 justify-between;
 }
 
 #Sun {
@@ -232,12 +210,12 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'main-font',
-    sans-serif;
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
 }
