@@ -5,8 +5,8 @@ import { BiX, BiPlus, BiTime, BiPencil, BiTrash } from "react-icons/bi";
 interface SideScheduleProps {
     dataParams: {
         show: boolean;
-        selectDay: string;
-        scheduleInfo: scheduleDto;
+        startday: string;
+        memoDetail: scheduleDto;
     }
     handleCloseButton: () => void;
     handleSubmitSchedule: (schedule: scheduleDto) => void;
@@ -15,14 +15,14 @@ interface SideScheduleProps {
 }
 
 export default function SideSchedule({ dataParams, handleCloseButton, handleSubmitSchedule, handleModifySchedule, handleDeleteSchedule } : SideScheduleProps) {
-    const [schedule, setSchedule] = useState<scheduleDto>(dataParams.scheduleInfo);
+    const [schedule, setSchedule] = useState<scheduleDto>(dataParams.memoDetail);
 
     function handleChangedValues(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const { name, value } = e.target;
         setSchedule(prevSchedule => ({
             ...prevSchedule,
             [name]: value,
-            startday: dataParams.selectDay
+            startday: dataParams.startday
         }));
     }
 
@@ -39,48 +39,38 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
     }
 
     useEffect(() => {
-        setSchedule(dataParams.scheduleInfo);
-    }, [dataParams.scheduleInfo]);
+        setSchedule(dataParams.memoDetail);
+    }, [dataParams.memoDetail]);
     
     return (
         <div className={dataParams.show ? 'side-on' : 'side-off'}>
             <div className="side-header">
                 <div className="side-title">
                     <p className="title">
-                        일정 {schedule.id === 0 ? '생성' : '수정'}
+                        메모 {schedule.id === 0 ? '생성' : '수정'}
                     </p>
-                    <p className="desc">({dataParams.selectDay})</p>
+                    <p className="desc">({dataParams.startday})</p>
                 </div>
                 <button className="side-close-button" onClick={handleCloseButton}><BiX/></button>
             </div>
-            <div className="side-schedule-title">
-                <span className="input-text">제목</span>
-                <div className="input-div">
-                    <input type="text" name="title" value={schedule.title} onChange={handleChangedValues}
-                           className="input"
-                           placeholder="제목을 입력하세요." required/>
-                </div>
+            <div className="side-memo-title">
+                <p>title</p>
+                <input type="text" name="title" value={schedule.title} onChange={handleChangedValues} className="input" placeholder="제목을 입력하세요." required />
             </div>
             <div className="side-select-time">
-                <span className="input-text">시작 날짜</span>
-                <div className="flex input-div">
+                <p>time</p>
+                <div className="flex relative">
                     <div className="timer">
                         <BiTime/>
                     </div>
-                    <input type="date" className="input" name="startday" value={schedule.startday}
-                           onChange={handleChangedValues}/>
                     <input type="time" className="input" name="starttime" step="60" value={schedule.starttime}
                            onChange={handleChangedValues} min="00:00" max="23:59"/>
                 </div>
-            </div>
-            <div className="side-select-time">
-                <span className="input-text">종료 날짜</span>
-                <div className="flex input-div">
+                <p className="ml-2">~</p>
+                <div className="flex relative">
                     <div className="timer">
                         <BiTime/>
                     </div>
-                    <input type="date" className="input" name="endday" value={schedule.endday}
-                           onChange={handleChangedValues}/>
                     <input type="time" className="input" name="endtime" step="60" value={schedule.endtime}
                            onChange={handleChangedValues} min="00:00" max="23:59"/>
                 </div>
@@ -92,15 +82,15 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
             <div className="side-confirm">
                 {schedule.id === 0 ? (
                     <button className="side-confirm-button" onClick={handleSubmitButton}>
-                        <BiPlus/>
+                        <BiPlus />
                     </button>
                 ) : (
                     <>
                         <button className="side-confirm-button" onClick={handleModifyButton}>
-                            <BiPencil/>
+                            <BiPencil />
                         </button>
                         <button className="side-delete-button" onClick={handleDeleteButton}>
-                            <BiTrash/>
+                            <BiTrash />
                         </button>
                     </>
                 )}
@@ -108,32 +98,3 @@ export default function SideSchedule({ dataParams, handleCloseButton, handleSubm
         </div>
     )
 }
-
-// <table className={divClassName} id={startDay} key={startDay} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
-//     <div className="day-header">
-//         <div>
-
-//         </div>
-
-//     </div>
-//     <div>
-//         {filteredData.length > 0 && filteredData.map((data) => (
-//             <span className="badge" key={data.id} onClick={
-//                 (e) => {
-//                     e.stopPropagation();
-//                     handleClickDetailSchedule(data.id);
-//                 }
-//             }>{data.title}
-//                 <div className="flex">
-//                      <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.endtime)}</p>
-//                     {/*<button className="schedule-delete-button" onClick={*/}
-//                     {/*    (e) => {*/}
-//                     {/*        e.stopPropagation();*/}
-//                     {/*        handleClickDeleteSchedule(data.id);*/}
-//                     {/*    }*/}
-//                     {/*}><BiX/></button>*/}
-//                 </div>
-//             </span>
-//         ))}
-//     </div>
-// </table>

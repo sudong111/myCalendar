@@ -21,11 +21,10 @@ interface CalendarProps {
 export default function CalendarDays({ dataParams, handleClickDay, handleCreateSchedule, handleDetailSchedule, handleDeleteSchedule } : CalendarProps) {
     const date = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let startDayOfMonth = startOfMonth(dataParams.month);
+    let startDayOfWeek = startOfWeek(startDayOfMonth);
     let holidayList = dataParams.holidayList;
     const rows = [];
     let days = [];
-    let scheduleList = [];
-    let dateList = [];
     let count = 0;
 
     function findHoliday(value: Date) {
@@ -42,15 +41,6 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
         return '';
     }
 
-    function getFilteredSchedulesForWeek(schedules: scheduleDto[], weekStart: Date, weekEnd: Date) {
-        return schedules.filter(item => {
-            const startday = new Date(item.startday);
-            const endday = new Date(item.endday);
-
-            return (startday <= weekEnd && endday >= weekStart);
-        });
-    }
-
     function handleClickCreateSchedule(day : Date) {
         handleCreateSchedule(day);
     }
@@ -65,17 +55,8 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
 
     while (count <= 4 ) {
         days = [];
-        dateList = [];
-        scheduleList = [];
-        let trList = [];
-        let tdList = [];
-        let firstDayOfWeek = addWeeks(startOfWeek(startDayOfMonth), count);
-        let endDayOfWeek = addWeeks(endOfWeek(startDayOfMonth), count);
-        let startDay = '';
-
-        const filteredData = getFilteredSchedulesForWeek(dataParams.scheduleList, firstDayOfWeek, endDayOfWeek);
-
-        //days
+        let firstDayOfWeek = addWeeks(startDayOfWeek, count);
+        let savedTime = '';
         for (let i = 0; i < 7 ; i++ ) {
             let day = addDays(firstDayOfWeek, i);
             let spanClassName = 'text';
@@ -91,27 +72,27 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
                 spanClassName += ' text-red';
             }
 
-            startDay = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
+            savedTime = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
+
+            let filteredData = dataParams.scheduleList.filter(item => {
+                const data = formatter('dayFormatter',item.startday);
+                return data === savedTime;
+            });
 
             days.push(
-                <td className={'grid-td ' + divClassName} key={startDay} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}></td>
-            )
-
-            dateList.push(
-                <td>
-                    <div className='day-header'>
+                <div className={divClassName} id={savedTime} key={savedTime} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}>
+                    <div className="day-header">
                         <div>
-                            <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
-                            {isHoliday && (
-                                <span className={spanClassName}>{isHoliday}</span>
-                            )}
+                        <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
+                        {isHoliday && (
+                            <span className={spanClassName}>{isHoliday}</span>
+                        )}
                         </div>
-
                         {divClassName != 'day-gray' && (
                             <div>
                                 <button className="schedule-create-button" onClick={
                                     (e) => {
-                                        e.stopPropagation()
+                                        e.stopPropagation();
                                         handleClickCreateSchedule(day);
                                     }
                                 }>
@@ -119,43 +100,31 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
                             </div>
                         )}
                     </div>
-                </td>
+                    <div>
+                        {filteredData.length > 0 && filteredData.map((data) => (
+                            <span className="badge" key={data.id} onClick={
+                                (e) => {
+                                    e.stopPropagation();
+                                    handleClickDetailSchedule(data.id);
+                                }
+                            }>{data.title}
+                                <div className="flex">
+                                     <p>{formatter('timeFormatter',data.starttime)} ~ {formatter('timeFormatter',data.endtime)}</p>
+                                    <button className="schedule-delete-button" onClick={
+                                        (e) => {
+                                            e.stopPropagation();
+                                            handleClickDeleteSchedule(data.id);
+                                        }
+                                    }><BiX/></button>
+                                </div>
+                            </span>
+                        ))}
+                    </div>
+                </div>
             )
         }
-        //week
-        filteredData.forEach((item, index) => {
-            for(let i = 0 ; i < 7 ; i++) {
-                tdList.push(
-                    <td>&nbsp;</td>
-                )
-            }
-            trList.push(
-                <tr>
-                    {tdList}
-                </tr>
-            );
-        });
-
-        scheduleList.push(
-            {trList}
-        )
-
         rows.push(
-            <div className='weeks' key={`week-${count}`}>
-                <table className='table-grid'>
-                    <tbody>
-                    <tr>
-                    {days}
-                    </tr>
-                    </tbody>
-                </table>
-                <table className='table-schedule'>
-                    <tbody>
-                    <tr>{dateList}</tr>
-                    {scheduleList}
-                    </tbody>
-                </table>
-                </div>
+            <div className='weeks' key={`week-${count}`}>{days}</div>
         );
         count++;
     }
