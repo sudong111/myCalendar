@@ -23,6 +23,9 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
     let startDayOfMonth = startOfMonth(dataParams.month);
     let holidayList = dataParams.holidayList;
     const rows = [];
+    let days = [];
+    let scheduleList = [];
+    let dateList = [];
     let count = 0;
 
     function findHoliday(value: Date) {
@@ -60,91 +63,100 @@ export default function CalendarDays({ dataParams, handleClickDay, handleCreateS
        handleDeleteSchedule(id);
     }
 
-    while (count <= 4) {
-        let days = [];
-        let dateList = [];
-        let scheduleList = [];
+    while (count <= 4 ) {
+        days = [];
+        dateList = [];
+        scheduleList = [];
+        let trList = [];
+        let tdList = [];
         let firstDayOfWeek = addWeeks(startOfWeek(startDayOfMonth), count);
         let endDayOfWeek = addWeeks(endOfWeek(startDayOfMonth), count);
         let startDay = '';
-        let divClassName = 'day';
 
         const filteredData = getFilteredSchedulesForWeek(dataParams.scheduleList, firstDayOfWeek, endDayOfWeek);
 
-        // grid
-        for (let i = 0; i < 7; i++) {
-            days.push(
-                <td className={'grid-td ' + divClassName} key={`grid-${count}-${i}`}></td>
-            );
-        }
+        //days
+        for (let i = 0; i < 7 ; i++ ) {
+            let day = addDays(firstDayOfWeek, i);
+            let spanClassName = 'text';
+            let divClassName = 'day';
+            let isHoliday = findHoliday(day);
 
-        // schedule
-        for (let i = 0; i < 5; i++) {
-            for (let j = 0; j < 7; j++) {
-                let day = addDays(firstDayOfWeek, j);
-                let spanClassName = 'text';
-                let isHoliday = findHoliday(day);
-
-                if (day.getMonth() !== startDayOfMonth.getMonth()) {
-                    spanClassName += ' text-gray';
-                    divClassName = 'day-gray';
-                }
-
-                if (isHoliday) {
-                    spanClassName += ' text-red';
-                }
-
-                startDay = day.getFullYear() + '-' + formatter('twoDigitsFormatter', (day.getMonth() + 1).toString()) + '-' + formatter('twoDigitsFormatter', (day.getDate()).toString());
-
-                if(i === 0) {
-                    dateList.push(
-                        <td key={`date-${count}-${i}-${j}`}>
-                            <div className='day-header'>
-                                <div>
-                                    <span className={spanClassName}>{day.getDate()}</span>
-                                    {isHoliday && <span className={spanClassName}>{isHoliday}</span>}
-                                </div>
-
-                                {divClassName !== 'day-gray' && (
-                                    <div>
-                                        <button className="schedule-create-button" onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleClickCreateSchedule(day);
-                                        }}>
-                                            <BiSolidPlusSquare />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </td>
-                    );
-                }
-                else {
-                    dateList.push(
-                        <td key={`date-${count}-${i}-${j}`}>&nbsp;</td>
-                    )
-                }
-
+            if(day.getMonth() != startDayOfMonth.getMonth()) {
+                spanClassName += ' text-gray';
+                divClassName = 'day-gray'
             }
-            scheduleList.push(<tr key={`schedule-${count}-${i}`}>{dateList}</tr>);
-            dateList = [];
+            
+            if(isHoliday) {
+                spanClassName += ' text-red';
+            }
+
+            startDay = day.getFullYear() + '-' + formatter('twoDigitsFormatter',(day.getMonth()+1).toString()) + '-' + formatter('twoDigitsFormatter',(day.getDate()).toString());
+
+            days.push(
+                <td className={'grid-td ' + divClassName} key={startDay} onClick={() => divClassName != 'day-gray' && handleClickDay(day)}></td>
+            )
+
+            dateList.push(
+                <td>
+                    <div className='day-header'>
+                        <div>
+                            <span className={spanClassName} id={date[i]} key={date[i]}>{day.getDate()}</span>
+                            {isHoliday && (
+                                <span className={spanClassName}>{isHoliday}</span>
+                            )}
+                        </div>
+
+                        {divClassName != 'day-gray' && (
+                            <div>
+                                <button className="schedule-create-button" onClick={
+                                    (e) => {
+                                        e.stopPropagation()
+                                        handleClickCreateSchedule(day);
+                                    }
+                                }>
+                                    <BiSolidPlusSquare/></button>
+                            </div>
+                        )}
+                    </div>
+                </td>
+            )
         }
+        //week
+        filteredData.forEach((item, index) => {
+            for(let i = 0 ; i < 7 ; i++) {
+                tdList.push(
+                    <td>&nbsp;</td>
+                )
+            }
+            trList.push(
+                <tr>
+                    {tdList}
+                </tr>
+            );
+        });
+
+        scheduleList.push(
+            {trList}
+        )
 
         rows.push(
             <div className='weeks' key={`week-${count}`}>
                 <table className='table-grid'>
                     <tbody>
-                    <tr>{days}</tr>
+                    <tr>
+                    {days}
+                    </tr>
                     </tbody>
                 </table>
                 <table className='table-schedule'>
                     <tbody>
+                    <tr>{dateList}</tr>
                     {scheduleList}
                     </tbody>
                 </table>
-            </div>
+                </div>
         );
-
         count++;
     }
 
