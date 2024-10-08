@@ -164,6 +164,7 @@ export default function Calendar() {
     useEffect(() => {
         setLoadData(false);
         getDate();
+        getScheduleList();
     }, [currentMonth]);
 
     useEffect(() => {
